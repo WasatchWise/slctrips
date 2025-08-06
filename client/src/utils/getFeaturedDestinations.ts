@@ -61,13 +61,20 @@ export async function getFeaturedDestinations(): Promise<Destination[]> {
       throw new Error('Failed to fetch destinations');
     }
     const responseData = await response.json();
-    const allDestinations: any[] = Array.isArray(responseData) ? responseData : (responseData.destinations || []);
+    
+    // Handle the API response format correctly
+    const allDestinations: any[] = responseData.destinations || [];
     
     console.log('API Response:', {
       hasDestinations: !!responseData.destinations,
       totalDestinations: allDestinations.length,
       categories: [...new Set(allDestinations.map(d => d.category))]
     });
+
+    if (allDestinations.length === 0) {
+      console.warn('No destinations found in API response, using mock data');
+      return mockDestinations;
+    }
 
     // Get diverse destinations from different categories with photos
     const categorizedDestinations = allDestinations.reduce((acc: any, dest: any) => {
@@ -220,7 +227,7 @@ export const useFeaturedDestinations = () => {
     const fetchAllDestinations = async () => {
       try {
         setLoading(true);
-        const response = await fetch('/api/destinations?limit=all&status=active');
+        const response = await fetch('/api/destinations');
         
         if (!response.ok) {
           console.warn('API not accessible, using mock data');
@@ -230,7 +237,18 @@ export const useFeaturedDestinations = () => {
         }
         
         const data = await response.json();
-        setDestinations(data.destinations || mockDestinations);
+        
+        // Handle the API response format correctly
+        const apiDestinations = data.destinations || [];
+        
+        if (apiDestinations.length === 0) {
+          console.warn('No destinations in API response, using mock data');
+          setDestinations(mockDestinations);
+        } else {
+          console.log(`Loaded ${apiDestinations.length} destinations from API`);
+          setDestinations(apiDestinations);
+        }
+        
         setError(null);
       } catch (err) {
         console.warn('API error, using mock data:', err);

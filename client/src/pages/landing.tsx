@@ -23,7 +23,8 @@ export default function Landing() {
       const response = await fetch('/api/destinations');
       if (!response.ok) throw new Error('Failed to fetch destinations');
       const result = await response.json();
-      return Array.isArray(result) ? result : (result.destinations || []);
+      // Handle the API response format correctly
+      return result.destinations || [];
     },
   });
 
