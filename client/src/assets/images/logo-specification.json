@@ -1,0 +1,133 @@
+{
+  "brand_assets": {
+    "slctrips_logo": {
+      "description": "SLCTrips wordmark with map pin 'i' design",
+      "type": "wordmark",
+      "colors": {
+        "slc": "#0082c9",
+        "trips": "#ffffff",
+        "pin_dot": "#f8a023",
+        "pin_gradient_top": "#f8a023",
+        "pin_gradient_bottom": "#db3d0e"
+      },
+      "usage": [
+        "website header",
+        "social media banners",
+        "PDF and TripKit branding",
+        "merchandise (shirts, stickers, etc.)",
+        "favicon or app splash screen"
+      ]
+    },
+    "dan_sasquatch": {
+      "description": "Dan the Wasatch Sasquatch - Official brand mascot",
+      "character": {
+        "name": "Dan the Wasatch Sasquatch",
+        "height": "7'2\"",
+        "personality": ["kind", "curious", "wise", "cheerful", "approachable", "helpful"],
+        "role": "Official mascot and storytelling ambassador for SLCTrips.com"
+      },
+      "appearance": {
+        "fur": {
+          "primary_color": "Deep navy blue",
+          "lowlight_color": "Canyon Red (#b33c1a)",
+          "texture": "Soft, stylized fur with rounded tufts on arms and legs"
+        },
+        "beard": {
+          "color": "Pioneer Gold (#f4b441)",
+          "style": "Layered, smooth-edged, full beard and mustache"
+        },
+        "hat": {
+          "type": "Beanie",
+          "color": "Canyon Red (#b33c1a)",
+          "fit": "Snug with soft folds around crown"
+        },
+        "clothing": {
+          "vest": {
+            "material": "Canvas-style fabric",
+            "color": "Ranger Olive (#78814A)",
+            "badges": [
+              {
+                "label": "SLCTrips",
+                "location": "Left chest",
+                "color": "Navy with white letters"
+              },
+              {
+                "label": "SLC Trips",
+                "location": "Right chest",
+                "color": "Orange with white letters"
+              },
+              {
+                "label": "WANDER DIVISION",
+                "location": "Lower right chest",
+                "color": "Blue with white letters"
+              }
+            ]
+          }
+        },
+        "accessories": {
+          "binoculars": "Classic black binoculars around neck",
+          "satchel": "Brown leather with 'DAN' gold keychain tag",
+          "camera": "Vintage instant camera, cream body, black lens, rainbow stripe",
+          "walking_stick": "Wood with carved Delicate Arch-like top"
+        }
+      },
+      "usage": [
+        "hero sections",
+        "brand storytelling",
+        "welcome messages",
+        "adventure guides",
+        "character interactions"
+      ]
+    },
+    "slc_airport_logo": {
+      "description": "The New Salt Lake City Airport logo",
+      "design": {
+        "shape": "Circular badge",
+        "outer_ring": "Light blue with white text",
+        "inner_circle": "Deep purple with white 'SLC' text",
+        "graphics": {
+          "mountain": "Orange stylized mountain peak",
+          "water": "Light blue wavy line",
+          "airplane": "White silhouette pointing upward"
+        }
+      },
+      "text": {
+        "outer_ring": {
+          "top": "THE NEW SALT LAKE CITY AIRPORT",
+          "bottom": "FLY HEALTHY"
+        },
+        "inner_circle": "SLC"
+      },
+      "usage": [
+        "airport partnerships",
+        "travel information",
+        "destination guides",
+        "transportation references"
+      ]
+    }
+  },
+  "image_urls": {
+    "slctrips_logo": "/images/slctrips-logo-wordmark.png",
+    "dan_sasquatch": "/images/dan-sasquatch-character.png",
+    "slc_airport_logo": "/images/slc-airport-logo.png"
+  },
+  "color_palette": {
+    "primary": {
+      "sky_blue": "#0082c9",
+      "sunset_orange": "#f8a023",
+      "gradient_orange": "#db3d0e",
+      "white": "#ffffff"
+    },
+    "secondary": {
+      "canyon_red": "#b33c1a",
+      "pioneer_gold": "#f4b441",
+      "navy": "#1a2b3b",
+      "ranger_olive": "#78814A"
+    },
+    "gradients": {
+      "orange_gradient": "linear-gradient(135deg, #f8a023 0%, #db3d0e 100%)",
+      "blue_gradient": "linear-gradient(135deg, #0082c9 0%, #1a2b3b 100%)",
+      "warm_gradient": "linear-gradient(135deg, #f4b441 0%, #b33c1a 100%)"
+    }
+  }
+} 

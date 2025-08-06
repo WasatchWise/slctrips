@@ -1,0 +1,62 @@
+/* SLCTrips.com Brand Color Palette */
+
+:root {
+  /* Primary Brand Colors */
+  --great-salt-blue: #0087c8;
+  --pioneer-gold: #f4b441;
+  --canyon-red: #b33c1a;
+  --wasatch-white: #ffffff;
+  --navy-ridge: #0d2a40;
+  --rocky-road: #f7f0e8;
+  
+  /* Legacy colors for backward compatibility */
+  --sky-blue: #0082c9;
+  --sunset-orange: #f8a023;
+  --gradient-orange: #db3d0e;
+  --white: #ffffff;
+  --canyon-red-alt: #b33c1a;
+  --pioneer-gold-alt: #f4b441;
+  --navy: #1a2b3b;
+  --ranger-olive: #78814A;
+}
+
+/* Utility classes for brand colors */
+.text-great-salt-blue { color: var(--great-salt-blue); }
+.text-pioneer-gold { color: var(--pioneer-gold); }
+.text-canyon-red { color: var(--canyon-red); }
+.text-wasatch-white { color: var(--wasatch-white); }
+.text-navy-ridge { color: var(--navy-ridge); }
+.text-rocky-road { color: var(--rocky-road); }
+
+.bg-great-salt-blue { background-color: var(--great-salt-blue); }
+.bg-pioneer-gold { background-color: var(--pioneer-gold); }
+.bg-canyon-red { background-color: var(--canyon-red); }
+.bg-wasatch-white { background-color: var(--wasatch-white); }
+.bg-navy-ridge { background-color: var(--navy-ridge); }
+.bg-rocky-road { background-color: var(--rocky-road); }
+
+.border-great-salt-blue { border-color: var(--great-salt-blue); }
+.border-pioneer-gold { border-color: var(--pioneer-gold); }
+.border-canyon-red { border-color: var(--canyon-red); }
+.border-wasatch-white { border-color: var(--wasatch-white); }
+.border-navy-ridge { border-color: var(--navy-ridge); }
+.border-rocky-road { border-color: var(--rocky-road); }
+
+/* Brand gradients */
+.bg-brand-gradient {
+  background: linear-gradient(135deg, var(--great-salt-blue) 0%, var(--navy-ridge) 100%);
+}
+
+.bg-gold-gradient {
+  background: linear-gradient(135deg, var(--pioneer-gold) 0%, var(--canyon-red) 100%);
+}
+
+/* Hover states */
+.hover\:text-great-salt-blue:hover { color: var(--great-salt-blue); }
+.hover\:text-pioneer-gold:hover { color: var(--pioneer-gold); }
+.hover\:bg-great-salt-blue:hover { background-color: var(--great-salt-blue); }
+.hover\:bg-pioneer-gold:hover { background-color: var(--pioneer-gold); }
+
+/* Focus states for accessibility */
+.focus\:ring-great-salt-blue:focus { --tw-ring-color: var(--great-salt-blue); }
+.focus\:ring-pioneer-gold:focus { --tw-ring-color: var(--pioneer-gold); } 

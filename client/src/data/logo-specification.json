@@ -1,0 +1,124 @@
+{
+  "logo": {
+    "brand": "SLCTrips",
+    "type": "wordmark",
+    "layout": "horizontal",
+    "background": {
+      "color": "transparent"
+    },
+    "text": {
+      "content": "SLCTrips",
+      "font": {
+        "style": "bold, geometric sans-serif",
+        "case": "uppercase for SLC, title case for Trips",
+        "customization": "custom styling on 'i' with map-pin design"
+      },
+      "color_segments": {
+        "SLC": {
+          "color": "Sky Blue",
+          "hex": "#0082c9"
+        },
+        "Trips": {
+          "color": "White",
+          "hex": "#ffffff"
+        }
+      },
+      "special_characters": {
+        "i": {
+          "dot": {
+            "shape": "circular pinhead",
+            "color": "sunset orange",
+            "hex": "#f8a023"
+          },
+          "stem": {
+            "shape": "inverted map pin",
+            "color": "gradient orange",
+            "gradient": {
+              "top": "#f8a023",
+              "bottom": "#db3d0e"
+            },
+            "symbolism": "travel marker / location pin"
+          },
+          "design_notes": "Represents exploration, discovery, and geographic focus"
+        }
+      }
+    },
+    "style": {
+      "alignment": "centered baseline",
+      "spacing": "tight kerning",
+      "effect": "flat, high-contrast",
+      "vibe": "modern, clean, family-friendly"
+    },
+    "usage_context": [
+      "website header",
+      "social media banners",
+      "PDF and TripKit branding",
+      "merchandise (shirts, stickers, etc.)",
+      "favicon or app splash screen (with simplified elements)"
+    ],
+    "brand_messaging": {
+      "values": ["exploration", "clarity", "community", "local travel"],
+      "audience": ["families", "travelers", "curious explorers", "locals"],
+      "voice": "playful but trustworthy"
+    }
+  },
+  "color_palette": {
+    "primary": {
+      "sky_blue": "#0082c9",
+      "sunset_orange": "#f8a023",
+      "gradient_orange": "#db3d0e",
+      "white": "#ffffff"
+    },
+    "secondary": {
+      "canyon_red": "#b33c1a",
+      "pioneer_gold": "#f4b441",
+      "navy": "#1a2b3b"
+    },
+    "gradients": {
+      "orange_gradient": "linear-gradient(135deg, #f8a023 0%, #db3d0e 100%)",
+      "blue_gradient": "linear-gradient(135deg, #0082c9 0%, #1a2b3b 100%)",
+      "warm_gradient": "linear-gradient(135deg, #f4b441 0%, #b33c1a 100%)"
+    }
+  },
+  "typography_system": {
+    "logo_font": {
+      "family": "Geometric sans-serif",
+      "weight": "Bold",
+      "style": "Clean, modern, approachable"
+    },
+    "brand_fonts": {
+      "headings": "Bold geometric sans-serif",
+      "body": "Clean, readable sans-serif",
+      "accent": "Friendly, rounded sans-serif"
+    }
+  },
+  "usage_guidelines": {
+    "minimum_size": "120px width for digital",
+    "clearance_space": "Equal to logo height on all sides",
+    "background_requirements": "High contrast backgrounds only",
+    "do_not": [
+      "Stretch or distort",
+      "Change colors",
+      "Add effects not specified",
+      "Use on busy backgrounds"
+    ]
+  },
+  "variations": {
+    "primary": "Full color wordmark with map pin 'i'",
+    "monochrome": "Single color version for limited color applications",
+    "reversed": "White version for dark backgrounds",
+    "simplified": "Text-only version for small applications"
+  },
+  "file_formats": {
+    "vector": "SVG for web and scalable applications",
+    "raster": "PNG with transparency for digital use",
+    "print": "High-resolution TIFF for print materials"
+  },
+  "mascot_integration": {
+    "dan_sasquatch": {
+      "usage": "Separate from logo, used as brand character",
+      "placement": "Alongside logo in hero sections",
+      "relationship": "Logo represents brand, Dan represents personality"
+    }
+  }
+} 

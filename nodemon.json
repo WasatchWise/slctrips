@@ -1,0 +1,10 @@
+{
+  "execMap": {
+    "ts": "node --import tsx"
+  },
+  "ext": "ts,js,json",
+  "ignore": ["node_modules", "dist", "*.test.ts", "*.spec.ts"],
+  "env": {
+    "NODE_ENV": "development"
+  }
+} 

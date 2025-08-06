@@ -1,0 +1,21 @@
+{
+  "name": "SLCTrips Explorer",
+  "short_name": "SLCTrips",
+  "description": "Discover 739+ destinations from Salt Lake City. Complete 2034 Olympic venue collection.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1e293b",
+  "theme_color": "#FFD700",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

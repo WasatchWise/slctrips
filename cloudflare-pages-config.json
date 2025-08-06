@@ -1,0 +1,96 @@
+{
+  "name": "slctrips-saas",
+  "production_branch": "main",
+  "build_config": {
+    "build_command": "npm run build",
+    "output_directory": "dist",
+    "root_directory": "/",
+    "environment_variables": {
+      "NODE_VERSION": "18",
+      "NPM_VERSION": "9"
+    }
+  },
+  "deployment_configs": {
+    "preview": {
+      "environment_variables": {
+        "VITE_API_URL": "https://api.slctrips.com",
+        "VITE_ENVIRONMENT": "preview",
+        "VITE_CLOUDFLARE_ANALYTICS": "true"
+      }
+    },
+    "production": {
+      "environment_variables": {
+        "VITE_API_URL": "https://api.slctrips.com",
+        "VITE_ENVIRONMENT": "production",
+        "VITE_CLOUDFLARE_ANALYTICS": "true",
+        "VITE_GOOGLE_ANALYTICS_ID": "your_ga_id"
+      }
+    }
+  },
+  "functions": {
+    "directory": "functions",
+    "node_compat": true
+  },
+  "headers": [
+    {
+      "source": "/*",
+      "headers": [
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=()"
+        }
+      ]
+    },
+    {
+      "source": "/api/*",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "https://slctrips.com"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET, POST, PUT, DELETE, OPTIONS"
+        },
+        {
+          "key": "Access-Control-Allow-Headers",
+          "value": "Content-Type, Authorization"
+        }
+      ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/admin",
+      "destination": "https://admin.slctrips.com",
+      "status": 301
+    },
+    {
+      "source": "/api",
+      "destination": "https://api.slctrips.com",
+      "status": 301
+    }
+  ],
+  "routes": [
+    {
+      "pattern": "/api/*",
+      "script": "api-worker.js"
+    },
+    {
+      "pattern": "/admin/*",
+      "script": "admin-worker.js"
+    }
+  ]
+} 

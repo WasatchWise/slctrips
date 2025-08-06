@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://www.slctrips.com/sitemap.xml
+
+# Block development files
+Disallow: /src/
+Disallow: /*.ts
+Disallow: /*.tsx
+Disallow: /node_modules/

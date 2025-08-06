@@ -1,0 +1,144 @@
+{
+  "name": "Dan the Wasatch Sasquatch",
+  "brand": "SLCTrips",
+  "species": "Sasquatch",
+  "height": "7'2\"",
+  "personality": {
+    "traits": ["kind", "curious", "wise", "cheerful", "approachable", "helpful"],
+    "archetype": "Everyday Explorer",
+    "role": "Official mascot and storytelling ambassador for SLCTrips.com"
+  },
+  "appearance": {
+    "fur": {
+      "primary_color": "Deep navy blue",
+      "lowlight_color": "Canyon Red (#b33c1a)",
+      "texture": "Soft, stylized fur with rounded tufts on arms and legs"
+    },
+    "beard": {
+      "color": "Pioneer Gold (#f4b441)",
+      "style": "Layered, smooth-edged, full beard and mustache",
+      "coverage": ["chin", "cheeks", "upper lip", "lower jaw", "sides of face"]
+    },
+    "face": {
+      "structure": "Wide, friendly face with soft, expressive contours",
+      "nose": {
+        "shape": "Large, rounded triangular nose with warm brown tone",
+        "placement": "Centered just above upper lip, slightly lifted"
+      },
+      "mouth": {
+        "shape": "Wide, cheerful smile with visible upper teeth",
+        "expression": "Warm and welcoming"
+      },
+      "eyebrows": {
+        "color": "Navy blue (matches fur)",
+        "shape": "Thick, curved, slightly arched",
+        "expression": "Friendly and animated"
+      },
+      "eyes": {
+        "sclera": "White (Wasatch White)",
+        "iris": "Warm brown with golden flecks",
+        "pupil": {
+          "shape": "Round",
+          "size": "Medium",
+          "position": "Centered, lively gaze"
+        },
+        "expression": "Bright, curious, intelligent"
+      },
+      "facial_hair": {
+        "style": "Full coverage on lower face; beard blends into fur",
+        "texture": "Feathery and layered with gold and red tones"
+      }
+    },
+    "headwear": {
+      "type": "Beanie",
+      "color": "Canyon Red (#b33c1a)",
+      "fit": "Snug with soft folds around crown"
+    },
+    "clothing": {
+      "vest": {
+        "material": "Canvas-style fabric",
+        "color": "Ranger Olive (#78814A)",
+        "pockets": 4,
+        "badges": [
+          {
+            "label": "SLCTrips",
+            "location": "Left chest",
+            "color": "Navy with white letters"
+          },
+          {
+            "label": "SLC Trips",
+            "location": "Right chest",
+            "color": "Orange with white letters"
+          },
+          {
+            "label": "WANDER DIVISION",
+            "location": "Lower right chest",
+            "color": "Blue with white letters (note: spelling error currently says 'OVISION')"
+          }
+        ]
+      },
+      "pants": {
+        "material": "Same fur as body",
+        "style": "Natural continuation of torso fur"
+      },
+      "footwear": "Barefoot with large, flat, furry feet and rounded toes"
+    },
+    "accessories": {
+      "binoculars": {
+        "style": "Classic black binoculars",
+        "placement": "Hanging around neck"
+      },
+      "satchel": {
+        "material": "Brown leather",
+        "label": "DAN (on gold keychain tag)",
+        "contents": ["postcards", "papers"],
+        "placement": "Left side, attached to shoulder strap"
+      },
+      "camera": {
+        "type": "Vintage instant camera",
+        "color": "Cream body, black lens, rainbow stripe",
+        "placement": "Held in left hand"
+      },
+      "walking_stick": {
+        "material": "Wood",
+        "color": "Natural brown with carved Delicate Arch-like top",
+        "placement": "Held in right hand"
+      }
+    },
+    "pose": {
+      "stance": "Standing with a relaxed posture",
+      "left_hand": "Holding camera forward",
+      "right_hand": "Holding walking stick vertically",
+      "expression": "Open-mouthed friendly smile, alert eyes"
+    }
+  },
+  "style": {
+    "rendering": "Warm 3D storybook illustration",
+    "inspiration": ["Pixar", "vintage WPA posters", "storybook mascots"],
+    "emotion": "Inviting, playful, wise"
+  },
+  "function": {
+    "in-universe_role": "Mascot, guide, and companion for SLCTrips adventures",
+    "AR_feature": "Can appear via QR code at trailheads and tourist stops",
+    "educational_use": "Narrates travel tips, local facts, and storytelling quests",
+    "brand_alignment": "Represents Utah's spirit of exploration, kindness, and curiosity"
+  },
+  "story": {
+    "origin": "Born in the Wasatch Mountains, Dan discovered his love for helping travelers find the best Utah adventures",
+    "mission": "To make every visitor feel welcome and help them discover Utah's hidden gems",
+    "catchphrase": "Welcome to Utah! Let's find your perfect adventure together!",
+    "favorite_destinations": [
+      "Antelope Island State Park",
+      "Big Cottonwood Canyon", 
+      "Park City Main Street",
+      "Zion National Park",
+      "Bryce Canyon National Park"
+    ]
+  },
+  "interactions": {
+    "greeting": "Warm, enthusiastic welcome with a big smile",
+    "advice_style": "Friendly and knowledgeable, like a trusted local friend",
+    "storytelling": "Shares personal experiences and local legends",
+    "helpfulness": "Always ready to suggest the perfect destination or activity"
+  }
+} 

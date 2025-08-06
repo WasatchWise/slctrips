@@ -1,0 +1,700 @@
+// SLCTrips Advanced Animation System
+// Comprehensive micro-interactions and transitions for the 9-category template framework
+
+// ============================================================================
+// KEYFRAMES DEFINITIONS
+// ============================================================================
+
+@keyframes fadeIn {
+  from { 
+    opacity: 0; 
+  }
+  to { 
+    opacity: 1; 
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    transform: translateY(-30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes pulseHighlight {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(var(--category-primary-rgb), 0.4);
+  }
+  70% {
+    transform: scale(1.02);
+    box-shadow: 0 0 0 10px rgba(var(--category-primary-rgb), 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(var(--category-primary-rgb), 0);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes bounce {
+  0%, 20%, 53%, 80%, 100% {
+    transform: translate3d(0, 0, 0);
+  }
+  40%, 43% {
+    transform: translate3d(0, -8px, 0);
+  }
+  70% {
+    transform: translate3d(0, -4px, 0);
+  }
+  90% {
+    transform: translate3d(0, -2px, 0);
+  }
+}
+
+@keyframes wiggle {
+  0%, 7% {
+    transform: rotateZ(0);
+  }
+  15% {
+    transform: rotateZ(-15deg);
+  }
+  20% {
+    transform: rotateZ(10deg);
+  }
+  25% {
+    transform: rotateZ(-10deg);
+  }
+  30% {
+    transform: rotateZ(6deg);
+  }
+  35% {
+    transform: rotateZ(-4deg);
+  }
+  40%, 100% {
+    transform: rotateZ(0);
+  }
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(var(--category-primary-rgb), 0.5);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(var(--category-primary-rgb), 0.8);
+  }
+}
+
+// ============================================================================
+// ANIMATION UTILITY CLASSES
+// ============================================================================
+
+.animate {
+  // Base animation properties
+  &--base {
+    animation-fill-mode: both;
+    animation-timing-function: ease-out;
+  }
+  
+  // Fade In variants
+  &--fade-in {
+    @extend .animate--base;
+    animation-name: fadeIn;
+    animation-duration: 400ms;
+  }
+  
+  &--fade-in-slow {
+    @extend .animate--base;
+    animation-name: fadeIn;
+    animation-duration: 800ms;
+  }
+  
+  // Slide In variants
+  &--slide-right {
+    @extend .animate--base;
+    animation-name: slideInRight;
+    animation-duration: 400ms;
+  }
+  
+  &--slide-left {
+    @extend .animate--base;
+    animation-name: slideInLeft;
+    animation-duration: 400ms;
+  }
+  
+  &--slide-up {
+    @extend .animate--base;
+    animation-name: slideInUp;
+    animation-duration: 500ms;
+  }
+  
+  &--slide-down {
+    @extend .animate--base;
+    animation-name: slideInDown;
+    animation-duration: 500ms;
+  }
+  
+  // Scale variants
+  &--scale-in {
+    @extend .animate--base;
+    animation-name: scaleIn;
+    animation-duration: 300ms;
+  }
+  
+  // Pulse Highlight (for selections)
+  &--pulse {
+    @extend .animate--base;
+    animation-name: pulseHighlight;
+    animation-duration: 600ms;
+  }
+  
+  // Shimmer effect (for loading states)
+  &--shimmer {
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.6) 50%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+  
+  // Bounce effect
+  &--bounce {
+    @extend .animate--base;
+    animation-name: bounce;
+    animation-duration: 1000ms;
+  }
+  
+  // Wiggle effect
+  &--wiggle {
+    @extend .animate--base;
+    animation-name: wiggle;
+    animation-duration: 1000ms;
+  }
+  
+  // Float effect
+  &--float {
+    @extend .animate--base;
+    animation-name: float;
+    animation-duration: 3000ms;
+    animation-iteration-count: infinite;
+  }
+  
+  // Glow effect
+  &--glow {
+    @extend .animate--base;
+    animation-name: glow;
+    animation-duration: 2000ms;
+    animation-iteration-count: infinite;
+  }
+  
+  // Stagger children animations
+  &--stagger-children {
+    & > * {
+      opacity: 0;
+      animation: fadeIn 400ms ease-out forwards;
+    }
+    
+    @for $i from 1 through 10 {
+      & > *:nth-child(#{$i}) {
+        animation-delay: #{$i * 100}ms;
+      }
+    }
+  }
+  
+  // Delay modifiers
+  @for $i from 1 through 5 {
+    &--delay-#{$i} {
+      animation-delay: #{$i * 100}ms;
+    }
+  }
+  
+  // Duration modifiers
+  &--fast {
+    animation-duration: 200ms !important;
+  }
+  
+  &--slow {
+    animation-duration: 800ms !important;
+  }
+  
+  &--slower {
+    animation-duration: 1200ms !important;
+  }
+}
+
+// ============================================================================
+// INTERACTIVE ANIMATION MIXINS
+// ============================================================================
+
+@mixin hover-lift {
+  transition: transform 250ms ease, box-shadow 250ms ease;
+  
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  }
+}
+
+@mixin hover-scale {
+  transition: transform 200ms ease;
+  
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+@mixin hover-glow {
+  transition: box-shadow 300ms ease;
+  
+  &:hover {
+    box-shadow: 0 0 20px rgba(var(--category-primary-rgb), 0.6);
+  }
+}
+
+@mixin focus-pulse {
+  &:focus-visible {
+    animation: pulseHighlight 600ms ease-out;
+    outline: 2px solid var(--category-primary);
+    outline-offset: 2px;
+  }
+}
+
+@mixin active-press {
+  &:active {
+    transform: scale(0.97);
+    transition: transform 100ms ease;
+  }
+}
+
+@mixin smooth-transition($properties...) {
+  transition: all 250ms ease;
+  
+  @each $property in $properties {
+    transition-property: $property;
+  }
+}
+
+// ============================================================================
+// SCROLL-TRIGGERED ANIMATIONS
+// ============================================================================
+
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 500ms ease, transform 500ms ease;
+  
+  &.revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  // Right side reveal
+  &--right {
+    transform: translateX(30px);
+    
+    &.revealed {
+      transform: translateX(0);
+    }
+  }
+  
+  // Left side reveal
+  &--left {
+    transform: translateX(-30px);
+    
+    &.revealed {
+      transform: translateX(0);
+    }
+  }
+  
+  // Scale reveal
+  &--scale {
+    transform: scale(0.95);
+    
+    &.revealed {
+      transform: scale(1);
+    }
+  }
+  
+  // Fade reveal
+  &--fade {
+    opacity: 0;
+    
+    &.revealed {
+      opacity: 1;
+    }
+  }
+  
+  // Rotate reveal
+  &--rotate {
+    transform: rotate(-5deg);
+    
+    &.revealed {
+      transform: rotate(0deg);
+    }
+  }
+}
+
+// ============================================================================
+// TEMPLATE-SPECIFIC ANIMATIONS
+// ============================================================================
+
+// Hero section animations
+.hero-content {
+  .hero-title {
+    animation: slideInUp 600ms ease-out;
+  }
+  
+  .hero-subtitle {
+    animation: slideInUp 600ms ease-out 200ms both;
+  }
+  
+  .hero-stats {
+    animation: slideInUp 600ms ease-out 400ms both;
+  }
+}
+
+// Card hover effects
+.destination-card {
+  @include hover-lift;
+  @include smooth-transition(transform, box-shadow);
+  
+  &:hover {
+    .card-image img {
+      transform: scale(1.05);
+    }
+  }
+  
+  .card-image img {
+    transition: transform 300ms ease;
+  }
+}
+
+// Button animations
+.btn {
+  @include smooth-transition(background-color, transform, box-shadow);
+  @include active-press;
+  
+  &:hover {
+    transform: translateY(-1px);
+  }
+  
+  &.btn-primary {
+    @include hover-glow;
+  }
+  
+  &.btn-secondary {
+    @include hover-scale;
+  }
+}
+
+// Form element animations
+.form-input {
+  @include smooth-transition(border-color, box-shadow);
+  
+  &:focus {
+    @include focus-pulse;
+  }
+}
+
+// Loading states
+.loading {
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.4),
+      transparent
+    );
+    animation: shimmer 1.5s infinite;
+  }
+}
+
+// ============================================================================
+// CATEGORY-SPECIFIC ANIMATIONS
+// ============================================================================
+
+// Outdoor Adventure animations
+.outdoor-adventure-template {
+  .difficulty-badge {
+    animation: pulseHighlight 800ms ease-out 1s both;
+  }
+  
+  .weather-card {
+    animation: slideInRight 500ms ease-out 600ms both;
+  }
+  
+  .safety-card {
+    animation: slideInUp 500ms ease-out 800ms both;
+  }
+}
+
+// Food & Drink animations
+.food-drink-template {
+  .menu-item {
+    @include hover-scale;
+  }
+  
+  .reservation-btn {
+    @include hover-glow;
+    animation: pulseHighlight 1000ms ease-out 1.5s both;
+  }
+}
+
+// Arts & Entertainment animations
+.arts-entertainment-template {
+  .event-card {
+    @include hover-lift;
+  }
+  
+  .ticket-info {
+    animation: slideInUp 600ms ease-out 400ms both;
+  }
+}
+
+// Hidden Gems animations
+.hidden-gems-template {
+  .exclusivity-badge {
+    animation: wiggle 1000ms ease-out 1s both;
+  }
+  
+  .premium-content {
+    @include hover-glow;
+  }
+}
+
+// Seasonal Events animations
+.seasonal-events-template {
+  .countdown-timer {
+    animation: pulseHighlight 800ms ease-out 500ms both;
+  }
+  
+  .seasonal-alert {
+    animation: slideInDown 500ms ease-out 300ms both;
+  }
+}
+
+// Quick Escapes animations
+.quick-escapes-template {
+  .time-badge {
+    animation: bounce 1000ms ease-out 1s both;
+  }
+  
+  .traffic-alert {
+    animation: slideInRight 500ms ease-out 200ms both;
+  }
+}
+
+// Youth & Family animations
+.youth-family-template {
+  .age-button {
+    @include hover-scale;
+    @include active-press;
+  }
+  
+  .activity-card {
+    @include hover-lift;
+  }
+}
+
+// ============================================================================
+// PERFORMANCE OPTIMIZATIONS
+// ============================================================================
+
+// Use transform and opacity for better performance
+.animate--performance {
+  will-change: transform, opacity;
+  
+  // Use hardware acceleration
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+// Reduce motion for accessibility
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+// ============================================================================
+// JAVASCRIPT INTEGRATION HELPERS
+// ============================================================================
+
+// Intersection Observer Helper (add to your main JS)
+/*
+document.addEventListener('DOMContentLoaded', () => {
+  const scrollRevealElements = document.querySelectorAll('.scroll-reveal');
+  
+  if (scrollRevealElements.length && 'IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    });
+    
+    scrollRevealElements.forEach(element => {
+      observer.observe(element);
+    });
+  } else {
+    // Fallback for browsers without IntersectionObserver
+    scrollRevealElements.forEach(element => {
+      element.classList.add('revealed');
+    });
+  }
+});
+*/
+
+// Animation trigger utilities
+.trigger-animation {
+  &.on-scroll {
+    opacity: 0;
+    transform: translateY(20px);
+    
+    &.animated {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 500ms ease, transform 500ms ease;
+    }
+  }
+  
+  &.on-hover {
+    transition: transform 250ms ease;
+    
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+  
+  &.on-click {
+    transition: transform 100ms ease;
+    
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+}
+
+// ============================================================================
+// RESPONSIVE ANIMATIONS
+// ============================================================================
+
+// Mobile optimizations
+@media (max-width: 768px) {
+  .animate {
+    // Reduce animation complexity on mobile
+    &--stagger-children > * {
+      animation-delay: 50ms !important;
+    }
+  }
+  
+  .scroll-reveal {
+    // Simpler animations on mobile
+    transform: translateY(10px);
+  }
+  
+  // Disable heavy animations on mobile
+  .animate--float,
+  .animate--wiggle {
+    animation: none;
+  }
+}
+
+// High-end device optimizations
+@media (min-width: 1200px) {
+  .animate {
+    // Enable more complex animations on larger screens
+    &--stagger-children > * {
+      animation-delay: 150ms;
+    }
+  }
+} 

@@ -1,0 +1,46 @@
+name: Daily Photo Sync
+
+on:
+  schedule:
+    # Run daily at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  daily-sync:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Set up environment variables
+      run: |
+        echo "SUPABASE_URL=${{ secrets.SUPABASE_URL }}" >> $GITHUB_ENV
+        echo "DANIEL_SUPABASE_ANON_KEY=${{ secrets.DANIEL_SUPABASE_ANON_KEY }}" >> $GITHUB_ENV
+        echo "GOOGLE_PLACES_API_KEY=${{ secrets.GOOGLE_PLACES_API_KEY }}" >> $GITHUB_ENV
+        echo "OPENWEATHER_API_KEY=${{ secrets.OPENWEATHER_API_KEY }}" >> $GITHUB_ENV
+
+    - name: Run daily photo sync
+      run: npx tsx scripts/daily-photo-sync.ts
+      env:
+        SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+        DANIEL_SUPABASE_ANON_KEY: ${{ secrets.DANIEL_SUPABASE_ANON_KEY }}
+        GOOGLE_PLACES_API_KEY: ${{ secrets.GOOGLE_PLACES_API_KEY }}
+        OPENWEATHER_API_KEY: ${{ secrets.OPENWEATHER_API_KEY }}
+
+    - name: Create summary
+      if: always()
+      run: |
+        echo "## Daily Photo Sync Summary" >> $GITHUB_STEP_SUMMARY
+        echo "✅ Daily photo sync completed" >> $GITHUB_STEP_SUMMARY
+        echo "📅 Run time: $(date)" >> $GITHUB_STEP_SUMMARY 
