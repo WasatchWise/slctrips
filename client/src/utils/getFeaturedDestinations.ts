@@ -246,7 +246,17 @@ export const useFeaturedDestinations = () => {
           setDestinations(mockDestinations);
         } else {
           console.log(`Loaded ${apiDestinations.length} destinations from API`);
-          setDestinations(apiDestinations);
+          
+          // Transform API data to include necessary fields for Bulls-Eye component
+          const transformedDestinations = apiDestinations.map((dest: any) => ({
+            ...dest,
+            driveTime: calculateDriveTimeFromCategory(dest.category),
+            drive_time: calculateDriveTimeFromCategory(dest.category),
+            photoUrl: dest.cover_photo_url || '',
+            photos: dest.cover_photo_url ? [{ url: dest.cover_photo_url }] : []
+          }));
+          
+          setDestinations(transformedDestinations);
         }
         
         setError(null);

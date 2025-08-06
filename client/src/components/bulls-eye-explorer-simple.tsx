@@ -228,16 +228,16 @@ export function BullsEyeExplorerSimple() {
     const ring = RINGS.find(r => r.id === ringId);
     if (!ring) return todaysPicks;
     
-    // Filter by drive time (simplified logic)
+    // Filter by category instead of drive time since API doesn't have drive_time
     return todaysPicks.filter(dest => {
-      const driveTime = dest.driveTime || dest.drive_time || 0;
+      const category = dest.category || '';
       switch (ringId) {
-        case '30min': return driveTime <= 30;
-        case '90min': return driveTime <= 90;
-        case '3hr': return driveTime <= 180;
-        case '5hr': return driveTime <= 300;
-        case '8hr': return driveTime <= 480;
-        case '12hr': return driveTime <= 720;
+        case '30min': return category === 'Downtown & Nearby';
+        case '90min': return category === 'Less than 90 Minutes';
+        case '3hr': return category === 'Less than 3 Hours';
+        case '5hr': return category === 'Less than 5 Hours';
+        case '8hr': return category === 'Less than 8 Hours';
+        case '12hr': return category === 'Less than 12 Hours';
         default: return true;
       }
     });
