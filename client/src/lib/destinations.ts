@@ -71,7 +71,7 @@ export const SUBSCRIPTION_TIERS = {
   OLYMPIC: 'olympic'
 } as const;
 
-export type SubscriptionTier = typeof SUBSCRIPTION_TIERS[keyof typeof SUBSCRIPTION_TIERS];
+export type SubscriptionTier = 'free' | 'premium' | 'olympic';
 
 export function formatDriveTime(minutes: number): string {
   const hours = Math.floor(minutes / 60);
@@ -103,28 +103,43 @@ export function canAccessDestination(destination: Destination, userTier?: Subscr
 }
 
 export function getDestinationImageUrl(destination: Destination): string | null {
-  // Only return authentic Google Places photos - no fallbacks
+  // First try Google Places photos
   if (destination.placesData?.photos && destination.placesData.photos.length > 0) {
     return destination.placesData.photos[0].photoUrl;
   }
 
-  return null;
+  // Fallback to destination's photoUrl
+  if (destination.photoUrl) {
+    return destination.photoUrl;
+  }
+
+  // Final fallback based on category
+  const categoryImages = {
+    'Downtown & Nearby': '/images/downtown-slc-fallback.jpg',
+    'Less than 90 Minutes': '/images/mountains-fallback.jpg',
+    'Less than 3 Hours': '/images/state-parks-fallback.jpg',
+    'Less than 5 Hours': '/images/national-parks-fallback.jpg',
+    'Less than 8 Hours': '/images/epic-adventures-fallback.jpg',
+    'Less than 12 Hours': '/images/road-trips-fallback.jpg'
+  };
+
+  return categoryImages[destination.category as keyof typeof categoryImages] || '/images/default-fallback.jpg';
 }
 
 export const transformSupabaseDestination = (dest: SupabaseDestination, content?: any): Destination => {
   return {
-    uuid: dest.id, // Use id as uuid for compatibility
+    uuid: dest.id.toString(), // Convert number to string for uuid
     name: dest.name,
     description: content?.description_short || content?.description_long || '',
     category: dest.category || 'Downtown & Nearby',
     driveTime: getDriveTimeFromCategory(dest.category || 'Downtown & Nearby'),
-    distance: Math.round(getDriveTimeFromCategory(dest.category || 'Downtown & Nearby') * 0.8),
+    distance: Math.round(getDriveTimeFromCategory(dest.category || 'Downtown & Nearby') * 0.8).toString(),
     coordinates: dest.latitude && dest.longitude ? {
       lat: dest.latitude,
       lng: dest.longitude
-    } : null,
+    } : undefined, // Use undefined instead of null
     photoUrl: content?.cover_photo_url || null,
-    rating: 4.5, // Default rating
+    rating: 4.5, // Default rating as number
     // Additional computed properties
     id: dest.id,
     address: content?.address_full || `${dest.county}, Utah` || '',
@@ -137,8 +152,8 @@ export const transformSupabaseDestination = (dest: SupabaseDestination, content?
     difficulty: 'Easy',
     bestTimeToVisit: 'Year-round',
     isFavorite: false,
-    createdAt: dest.created_at ? new Date(dest.created_at) : new Date(),
-    updatedAt: dest.updated_at ? new Date(dest.updated_at) : new Date()
+    createdAt: dest.created_at ? new Date(dest.created_at).toISOString() : new Date().toISOString(),
+    updatedAt: dest.updated_at ? new Date(dest.updated_at).toISOString() : new Date().toISOString()
   };
 };
 
