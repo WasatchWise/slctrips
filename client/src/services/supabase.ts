@@ -30,32 +30,44 @@ export interface Activity {
  * Uses new BRAINS schema with proper foreign key relationships
  */
 export async function fetchDestinationsByCategory(category: string) {
-  const { data, error } = await supabase
-    .from('destinations')
-    .select(`
-      uuid,
-      name,
-      city,
-      destination_url,
-      category,
-      drive_time_minute,
-      latitude,
-      longitude,
-      description,
-      cover_photo_url,
-      cover_photo_alt_text,
-      destination_tags:destination_tags ( tag_name ),
-      activities:activities ( activity_name )
-    `)
-    .eq('category', category)
-    .order('name', { ascending: true });
+  try {
+    const response = await fetch('/api/destinations');
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const result = await response.json();
+    
+    if (!result.destinations || !Array.isArray(result.destinations)) {
+      throw new Error('Invalid API response format');
+    }
 
-  if (error) {
-    // console.error('Error fetching destinations by category:', error);
+    // Filter by category
+    const filteredDestinations = result.destinations.filter((dest: any) => 
+      dest.category === category
+    );
+
+    // Transform to match the expected interface
+    return filteredDestinations.map((dest: any) => ({
+      uuid: dest.id,
+      name: dest.name,
+      city: dest.city || null,
+      destination_url: dest.destination_url || '',
+      category: dest.category,
+      drive_time_minute: dest.drive_time || 60,
+      latitude: dest.latitude,
+      longitude: dest.longitude,
+      description: dest.description_short || dest.description_long || dest.description,
+      cover_photo_url: dest.cover_photo_url,
+      cover_photo_alt_text: dest.cover_photo_alt_text,
+      destination_tags: dest.tags ? dest.tags.map((tag: string) => ({ tag_name: tag })) : [],
+      activities: dest.activities ? dest.activities.map((activity: string) => ({ activity_name: activity })) : []
+    })) as Destination[];
+  } catch (error) {
+    console.error('Error fetching destinations by category:', error);
     throw error;
   }
-
-  return data as Destination[];
 }
 
 /**
@@ -63,32 +75,50 @@ export async function fetchDestinationsByCategory(category: string) {
  * SEO-friendly routing using slugified URLs
  */
 export async function fetchDestinationBySlug(slug: string) {
-  const { data, error } = await supabase
-    .from('destinations')
-    .select(`
-      uuid,
-      name,
-      city,
-      destination_url,
-      category,
-      drive_time_minute,
-      latitude,
-      longitude,
-      description,
-      cover_photo_url,
-      cover_photo_alt_text,
-      destination_tags:destination_tags ( tag_name ),
-      activities:activities ( activity_name )
-    `)
-    .eq('destination_url', slug)
-    .single();
+  try {
+    const response = await fetch('/api/destinations');
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const result = await response.json();
+    
+    if (!result.destinations || !Array.isArray(result.destinations)) {
+      throw new Error('Invalid API response format');
+    }
 
-  if (error) {
-    // console.error('Error fetching destination by slug:', error);
+    // Find destination by slug
+    const dest = result.destinations.find((d: any) => 
+      d.slug === slug || 
+      d.destination_url === slug ||
+      d.name?.toLowerCase().replace(/[^a-z0-9]+/g, '-') === slug.toLowerCase()
+    );
+
+    if (!dest) {
+      throw new Error('Destination not found');
+    }
+
+    // Transform to match the expected interface
+    return {
+      uuid: dest.id,
+      name: dest.name,
+      city: dest.city || null,
+      destination_url: dest.destination_url || '',
+      category: dest.category,
+      drive_time_minute: dest.drive_time || 60,
+      latitude: dest.latitude,
+      longitude: dest.longitude,
+      description: dest.description_short || dest.description_long || dest.description,
+      cover_photo_url: dest.cover_photo_url,
+      cover_photo_alt_text: dest.cover_photo_alt_text,
+      destination_tags: dest.tags ? dest.tags.map((tag: string) => ({ tag_name: tag })) : [],
+      activities: dest.activities ? dest.activities.map((activity: string) => ({ activity_name: activity })) : []
+    } as Destination;
+  } catch (error) {
+    console.error('Error fetching destination by slug:', error);
     throw error;
   }
-
-  return data as Destination;
 }
 
 /**
@@ -96,53 +126,70 @@ export async function fetchDestinationBySlug(slug: string) {
  * Used for homepage category cards
  */
 export async function fetchDestinationCounts() {
-  const { data, error } = await supabase
-    .from('destinations')
-    .select('category');
+  try {
+    const response = await fetch('/api/destinations');
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const result = await response.json();
+    
+    if (!result.destinations || !Array.isArray(result.destinations)) {
+      throw new Error('Invalid API response format');
+    }
 
-  if (error) {
-    // console.error('Error fetching destination counts:', error);
+    // Group by category and count
+    const counts = result.destinations.reduce((acc: Record<string, number>, dest: any) => {
+      const category = dest.category || 'Other';
+      acc[category] = (acc[category] || 0) + 1;
+      return acc;
+    }, {});
+
+    return counts;
+  } catch (error) {
+    console.error('Error fetching destination counts:', error);
     throw error;
   }
-
-  // Group by category and count
-  const counts = data.reduce((acc: Record<string, number>, dest) => {
-    acc[dest.category] = (acc[dest.category] || 0) + 1;
-    return acc;
-  }, {});
-
-  return counts;
 }
 
 /**
  * Fetch all destinations for search and filtering
  */
 export async function fetchAllDestinations() {
-  const { data, error } = await supabase
-    .from('destinations')
-    .select(`
-      uuid,
-      name,
-      city,
-      destination_url,
-      category,
-      drive_time_minute,
-      latitude,
-      longitude,
-      description,
-      cover_photo_url,
-      cover_photo_alt_text,
-      destination_tags:destination_tags ( tag_name ),
-      activities:activities ( activity_name )
-    `)
-    .order('name', { ascending: true });
+  try {
+    const response = await fetch('/api/destinations');
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const result = await response.json();
+    
+    if (!result.destinations || !Array.isArray(result.destinations)) {
+      throw new Error('Invalid API response format');
+    }
 
-  if (error) {
-    // console.error('Error fetching all destinations:', error);
+    // Transform API data to match the expected interface
+    return result.destinations.map((dest: any) => ({
+      uuid: dest.id,
+      name: dest.name,
+      city: dest.city || null,
+      destination_url: dest.destination_url || '',
+      category: dest.category,
+      drive_time_minute: dest.drive_time || 60,
+      latitude: dest.latitude,
+      longitude: dest.longitude,
+      description: dest.description_short || dest.description_long || dest.description,
+      cover_photo_url: dest.cover_photo_url,
+      cover_photo_alt_text: dest.cover_photo_alt_text,
+      destination_tags: dest.tags ? dest.tags.map((tag: string) => ({ tag_name: tag })) : [],
+      activities: dest.activities ? dest.activities.map((activity: string) => ({ activity_name: activity })) : []
+    })) as Destination[];
+  } catch (error) {
+    console.error('Error fetching destinations:', error);
     throw error;
   }
-
-  return data as Destination[];
 }
 
 /**

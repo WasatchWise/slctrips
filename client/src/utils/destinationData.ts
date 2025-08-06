@@ -45,30 +45,28 @@ export interface Destination {
   address_full?: string;
 }
 
-// Fetch destinations from Supabase ONLY - no fake data
+// Fetch destinations from API endpoint instead of Supabase directly
 export const fetchDestinations = async (): Promise<Destination[]> => {
   try {
-    console.log('🔍 Fetching destinations from Supabase...');
+    console.log('🔍 Fetching destinations from API...');
     
-    const { data, error } = await supabase
-      .from('destinations')
-      .select('*')
-      .limit(2000); // Get all destinations
-
-    if (error) {
-      console.error('❌ Supabase fetch error:', error);
-      throw new Error(`Failed to fetch destinations: ${error.message}`);
+    const response = await fetch('/api/destinations');
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const result = await response.json();
+    
+    if (!result.destinations || !Array.isArray(result.destinations)) {
+      console.warn('⚠️ No destinations found in API response');
+      throw new Error('Invalid API response format');
     }
 
-    if (!data || data.length === 0) {
-      console.warn('⚠️ No destinations found in Supabase');
-      throw new Error('No destinations found in database');
-    }
+    console.log(`✅ Found ${result.destinations.length} destinations from API`);
 
-    console.log(`✅ Found ${data.length} destinations in Supabase`);
-
-    // Transform Supabase data to our interface
-    const destinations: Destination[] = data.map((dest: any, index: number) => {
+    // Transform API data to our interface
+    const destinations: Destination[] = result.destinations.map((dest: any, index: number) => {
       // Generate realistic rating based on destination type
       let rating = 4.0;
       if (dest.name?.toLowerCase().includes('national park')) rating = 4.8;
@@ -150,13 +148,27 @@ export const fetchDestinationBySlug = async (slug: string): Promise<Destination 
   try {
     console.log(`🔍 Fetching destination by slug: ${slug}`);
     
-    const { data, error } = await supabase
-      .from('destinations')
-      .select('*')
-      .eq('slug', slug)
-      .single();
+    // Fetch all destinations and find by slug
+    const response = await fetch('/api/destinations');
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const result = await response.json();
+    
+    if (!result.destinations || !Array.isArray(result.destinations)) {
+      console.warn('⚠️ No destinations found in API response');
+      return null;
+    }
 
-    if (error || !data) {
+    // Find destination by slug
+    const data = result.destinations.find((dest: any) => 
+      dest.slug === slug || 
+      dest.name?.toLowerCase().replace(/[^a-z0-9]+/g, '-') === slug.toLowerCase()
+    );
+
+    if (!data) {
       console.warn(`⚠️ Destination not found: ${slug}`);
       return null;
     }
