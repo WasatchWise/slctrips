@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
-import { mockDestinations, MockDestination } from "../../utils/mockData";
+import { fetchDestinationBySlug, Destination } from "../../utils/destinationData";
 import { MapPin, Clock, Star, Phone, Globe, Calendar, Users, Dog, Baby, Car, Coffee, Camera, Mountain, Heart } from "lucide-react";
 
 export default function DestinationDetail() {
   const [, setLocation] = useLocation();
-  const [destination, setDestination] = useState<MockDestination | null>(null);
+  const [destination, setDestination] = useState<Destination | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -14,16 +14,25 @@ export default function DestinationDetail() {
     const pathParts = window.location.pathname.split('/');
     const slug = pathParts[pathParts.length - 1];
 
-    // Find destination by slug
-    const foundDestination = mockDestinations.find(dest => dest.slug === slug);
-    
-    if (foundDestination) {
-      setDestination(foundDestination);
-    } else {
-      setError("Destination not found");
-    }
-    
-    setLoading(false);
+    // Fetch destination by slug
+    const loadDestination = async () => {
+      try {
+        const foundDestination = await fetchDestinationBySlug(slug);
+        
+        if (foundDestination) {
+          setDestination(foundDestination);
+        } else {
+          setError("Destination not found");
+        }
+      } catch (error) {
+        console.error('Error loading destination:', error);
+        setError("Failed to load destination");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadDestination();
   }, []);
 
   if (loading) {
@@ -62,6 +71,9 @@ export default function DestinationDetail() {
           src={destination.photoUrl}
           alt={destination.name}
           className="w-full h-full object-cover"
+          onError={(e) => {
+            e.currentTarget.src = '/images/default-fallback.jpg';
+          }}
         />
         <div className="absolute inset-0 bg-black bg-opacity-40"></div>
         <div className="absolute inset-0 flex items-center justify-center">
@@ -70,7 +82,7 @@ export default function DestinationDetail() {
             <div className="flex items-center justify-center space-x-4">
               <div className="flex items-center">
                 <Star className="w-5 h-5 text-yellow-400 mr-1" />
-                <span className="text-lg">{destination.rating}</span>
+                <span className="text-lg">{destination.rating.toFixed(1)}</span>
               </div>
               <div className="flex items-center">
                 <Clock className="w-5 h-5 mr-1" />
@@ -123,7 +135,9 @@ export default function DestinationDetail() {
             {/* Description */}
             <div className="bg-white rounded-lg shadow-md p-6 mb-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-4">About {destination.name}</h2>
-              <p className="text-gray-700 leading-relaxed mb-6">{destination.description}</p>
+              <p className="text-gray-700 leading-relaxed mb-6">
+                {destination.description_long || destination.description}
+              </p>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
@@ -189,7 +203,7 @@ export default function DestinationDetail() {
               <div className="space-y-3">
                 <div className="flex items-center">
                   <MapPin className="w-5 h-5 text-gray-400 mr-3" />
-                  <span className="text-gray-700">{destination.address}</span>
+                  <span className="text-gray-700">{destination.address_full || destination.address}</span>
                 </div>
                 <div className="flex items-center">
                   <Clock className="w-5 h-5 text-gray-400 mr-3" />
@@ -197,7 +211,7 @@ export default function DestinationDetail() {
                 </div>
                 <div className="flex items-center">
                   <Star className="w-5 h-5 text-gray-400 mr-3" />
-                  <span className="text-gray-700">{destination.rating} out of 5 stars</span>
+                  <span className="text-gray-700">{destination.rating.toFixed(1)} out of 5 stars</span>
                 </div>
                 {destination.website && (
                   <div className="flex items-center">

@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { mockDestinations, MockDestination } from "../utils/mockData";
+import { fetchDestinations, Destination } from "../utils/destinationData";
 
 export default function Destinations() {
-  const [destinations, setDestinations] = useState<MockDestination[]>([]);
-  const [filteredDestinations, setFilteredDestinations] = useState<MockDestination[]>([]);
+  const [destinations, setDestinations] = useState<Destination[]>([]);
+  const [filteredDestinations, setFilteredDestinations] = useState<Destination[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -12,16 +12,24 @@ export default function Destinations() {
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
   // Categories and subcategories
-  const categories = ["All", "Downtown & Nearby", "Less than 90 Minutes", "Less than 3 Hours", "Less than 5 Hours", "Less than 8 Hours", "Less than 12 Hours"];
-  const subcategories = ["All", "Cultural", "Recreation", "Historical", "Entertainment", "Outdoor Adventure", "Skiing", "Golf", "Water Recreation", "Hiking", "National Parks", "State Parks", "Ski Resorts", "Lakes", "Historical Sites", "Epic Adventures"];
+  const categories = ["All", "Downtown & Nearby", "Golf", "National Parks", "State Parks", "Ski Resorts", "Hiking", "Lakes & Water", "Historical"];
+  const subcategories = ["All", "Cultural", "Golf Courses", "National Parks & Monuments", "State Parks", "Skiing", "Hiking Trails", "Water Recreation", "Historical Sites"];
 
   useEffect(() => {
-    // Simulate API call
-    setTimeout(() => {
-      setDestinations(mockDestinations);
-      setFilteredDestinations(mockDestinations);
-      setLoading(false);
-    }, 1000);
+    // Fetch destinations from Supabase or use comprehensive generated data
+    const loadDestinations = async () => {
+      try {
+        const data = await fetchDestinations();
+        setDestinations(data);
+        setFilteredDestinations(data);
+      } catch (error) {
+        console.error('Error loading destinations:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadDestinations();
   }, []);
 
   useEffect(() => {
@@ -49,8 +57,8 @@ export default function Destinations() {
 
     // Apply sorting
     filtered.sort((a, b) => {
-      let aValue: any = a[sortBy as keyof MockDestination];
-      let bValue: any = b[sortBy as keyof MockDestination];
+      let aValue: any = a[sortBy as keyof Destination];
+      let bValue: any = b[sortBy as keyof Destination];
 
       if (typeof aValue === "string") {
         aValue = aValue.toLowerCase();
@@ -190,6 +198,9 @@ export default function Destinations() {
                     src={destination.photoUrl}
                     alt={destination.name}
                     className="w-full h-48 object-cover"
+                    onError={(e) => {
+                      e.currentTarget.src = '/images/default-fallback.jpg';
+                    }}
                   />
                 </div>
                 <div className="p-4">
@@ -199,7 +210,7 @@ export default function Destinations() {
                     </h3>
                     <div className="flex items-center">
                       <span className="text-yellow-400">★</span>
-                      <span className="ml-1 text-sm text-gray-600">{destination.rating}</span>
+                      <span className="ml-1 text-sm text-gray-600">{destination.rating.toFixed(1)}</span>
                     </div>
                   </div>
                   
@@ -213,7 +224,7 @@ export default function Destinations() {
                   </div>
 
                   <p className="text-sm text-gray-600 mb-3 line-clamp-2">
-                    {destination.description}
+                    {destination.description_short || destination.description}
                   </p>
 
                   <div className="flex items-center justify-between">
