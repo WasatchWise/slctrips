@@ -1,92 +1,30 @@
-import React, { useState, useEffect } from 'react';
-import { useRoute } from 'wouter';
-import { MapPin, Clock, Mountain, Star, Share2, Heart, Navigation, Camera } from 'lucide-react';
-import AffiliateRecommendations from '../../components/affiliate-recommendations';
-
-interface Destination {
-  id: string;
-  name: string;
-  slug: string;
-  description: string;
-  long_description: string;
-  category: string;
-  subcategory: string;
-  drive_time: number;
-  photos: string[];
-  latitude: number;
-  longitude: number;
-  status: string;
-  best_time_to_visit: string;
-  difficulty_level: string;
-  accessibility: string;
-  tips: string[];
-  nearby_attractions: string[];
-}
+import { useState, useEffect } from "react";
+import { useLocation } from "wouter";
+import { mockDestinations, MockDestination } from "../../utils/mockData";
+import { MapPin, Clock, Star, Phone, Globe, Calendar, Users, Dog, Baby, Car, Coffee, Camera, Mountain, Heart } from "lucide-react";
 
 export default function DestinationDetail() {
-  const [, params] = useRoute('/destination/:slug');
-  const slug = params?.slug;
-  const [destination, setDestination] = useState<Destination | null>(null);
+  const [, setLocation] = useLocation();
+  const [destination, setDestination] = useState<MockDestination | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedPhoto, setSelectedPhoto] = useState(0);
 
   useEffect(() => {
-    if (slug) {
-      fetchDestination();
+    // Get slug from URL
+    const pathParts = window.location.pathname.split('/');
+    const slug = pathParts[pathParts.length - 1];
+
+    // Find destination by slug
+    const foundDestination = mockDestinations.find(dest => dest.slug === slug);
+    
+    if (foundDestination) {
+      setDestination(foundDestination);
+    } else {
+      setError("Destination not found");
     }
-  }, [slug]);
-
-  const fetchDestination = async () => {
-    try {
-      setLoading(true);
-      const response = await fetch(`/api/destinations/${slug}`);
-      
-      if (!response.ok) {
-        throw new Error('Destination not found');
-      }
-
-      const data = await response.json();
-      setDestination(data);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load destination');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const formatDriveTime = (minutes: number) => {
-    if (minutes < 60) return `${minutes} min`;
-    const hours = Math.floor(minutes / 60);
-    const mins = minutes % 60;
-    return mins > 0 ? `${hours}h ${mins}m` : `${hours}h`;
-  };
-
-  const getDifficultyColor = (level: string) => {
-    switch (level.toLowerCase()) {
-      case 'easy':
-        return 'bg-green-100 text-green-800';
-      case 'moderate':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'difficult':
-        return 'bg-red-100 text-red-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
-    }
-  };
-
-  const getCategoryIcon = (category: string) => {
-    switch (category.toLowerCase()) {
-      case 'national parks':
-        return <Mountain className="w-5 h-5" />;
-      case 'state parks':
-        return <MapPin className="w-5 h-5" />;
-      case 'hiking trails':
-        return <Mountain className="w-5 h-5" />;
-      default:
-        return <MapPin className="w-5 h-5" />;
-    }
-  };
+    
+    setLoading(false);
+  }, []);
 
   if (loading) {
     return (
@@ -104,10 +42,13 @@ export default function DestinationDetail() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900 mb-4">Destination Not Found</h1>
-          <p className="text-gray-600 mb-4">{error || 'The destination you\'re looking for doesn\'t exist.'}</p>
-          <a href="/destinations" className="text-blue-600 hover:text-blue-800 underline">
-            Browse all destinations
-          </a>
+          <p className="text-gray-600 mb-6">{error || "The destination you're looking for doesn't exist."}</p>
+          <button
+            onClick={() => setLocation("/destinations")}
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+          >
+            Back to Destinations
+          </button>
         </div>
       </div>
     );
@@ -117,217 +58,262 @@ export default function DestinationDetail() {
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
       <div className="relative h-96 bg-gray-900">
-        {destination.photos && destination.photos.length > 0 ? (
-          <img
-            src={destination.photos[selectedPhoto]}
-            alt={destination.name}
-            className="w-full h-full object-cover"
-            onError={(e) => {
-              e.currentTarget.style.display = 'none';
-            }}
-          />
-        ) : (
-          <div className="w-full h-full bg-gradient-to-br from-blue-600 to-purple-700 flex items-center justify-center">
-            <Camera className="w-16 h-16 text-white opacity-50" />
-          </div>
-        )}
-        
-        {/* Photo Gallery Thumbnails */}
-        {destination.photos && destination.photos.length > 1 && (
-          <div className="absolute bottom-4 left-4 right-4">
-            <div className="flex space-x-2 overflow-x-auto">
-              {destination.photos.map((photo, index) => (
-                <button
-                  key={index}
-                  onClick={() => setSelectedPhoto(index)}
-                  className={`flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 ${
-                    selectedPhoto === index ? 'border-white' : 'border-transparent'
-                  }`}
-                >
-                  <img
-                    src={photo}
-                    alt={`${destination.name} photo ${index + 1}`}
-                    className="w-full h-full object-cover"
-                  />
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Overlay */}
+        <img
+          src={destination.photoUrl}
+          alt={destination.name}
+          className="w-full h-full object-cover"
+        />
         <div className="absolute inset-0 bg-black bg-opacity-40"></div>
-        
-        {/* Content */}
-        <div className="absolute inset-0 flex items-end">
-          <div className="max-w-7xl mx-auto px-4 py-8 w-full">
-            <div className="flex items-center justify-between">
-              <div>
-                <div className="flex items-center space-x-2 mb-2">
-                  {getCategoryIcon(destination.category)}
-                  <span className="text-white text-sm font-medium">
-                    {destination.category}
-                  </span>
-                </div>
-                <h1 className="text-4xl font-bold text-white mb-2">
-                  {destination.name}
-                </h1>
-                <div className="flex items-center space-x-4 text-white text-sm">
-                  <div className="flex items-center space-x-1">
-                    <Clock className="w-4 h-4" />
-                    <span>{formatDriveTime(destination.drive_time)} from SLC</span>
-                  </div>
-                  <div className="flex items-center space-x-1">
-                    <MapPin className="w-4 h-4" />
-                    <span>{destination.subcategory}</span>
-                  </div>
-                </div>
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="text-center text-white">
+            <h1 className="text-4xl md:text-6xl font-bold mb-4">{destination.name}</h1>
+            <div className="flex items-center justify-center space-x-4">
+              <div className="flex items-center">
+                <Star className="w-5 h-5 text-yellow-400 mr-1" />
+                <span className="text-lg">{destination.rating}</span>
               </div>
-              
-              <div className="flex space-x-2">
-                <button className="p-2 bg-white bg-opacity-20 rounded-lg text-white hover:bg-opacity-30 transition-colors">
-                  <Share2 className="w-5 h-5" />
-                </button>
-                <button className="p-2 bg-white bg-opacity-20 rounded-lg text-white hover:bg-opacity-30 transition-colors">
-                  <Heart className="w-5 h-5" />
-                </button>
+              <div className="flex items-center">
+                <Clock className="w-5 h-5 mr-1" />
+                <span className="text-lg">{destination.driveTime} min from SLC</span>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      {/* Content */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Content */}
-          <div className="lg:col-span-2 space-y-8">
-            {/* Description */}
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">About</h2>
-              <p className="text-gray-700 leading-relaxed mb-4">
-                {destination.description}
-              </p>
-              {destination.long_description && (
-                <p className="text-gray-700 leading-relaxed">
-                  {destination.long_description}
-                </p>
-              )}
+          <div className="lg:col-span-2">
+            {/* Quick Info */}
+            <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="text-center">
+                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                    <MapPin className="w-6 h-6 text-blue-600" />
+                  </div>
+                  <p className="text-sm text-gray-600">Category</p>
+                  <p className="font-semibold">{destination.category}</p>
+                </div>
+                <div className="text-center">
+                  <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                    <Mountain className="w-6 h-6 text-green-600" />
+                  </div>
+                  <p className="text-sm text-gray-600">Type</p>
+                  <p className="font-semibold">{destination.subcategory}</p>
+                </div>
+                <div className="text-center">
+                  <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                    <Calendar className="w-6 h-6 text-yellow-600" />
+                  </div>
+                  <p className="text-sm text-gray-600">Best Time</p>
+                  <p className="font-semibold">{destination.bestTimeToVisit}</p>
+                </div>
+                <div className="text-center">
+                  <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                    <Heart className="w-6 h-6 text-purple-600" />
+                  </div>
+                  <p className="text-sm text-gray-600">Difficulty</p>
+                  <p className="font-semibold">{destination.difficulty}</p>
+                </div>
+              </div>
             </div>
 
-            {/* Details */}
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">Details</h2>
+            {/* Description */}
+            <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">About {destination.name}</h2>
+              <p className="text-gray-700 leading-relaxed mb-6">{destination.description}</p>
+              
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-2">Best Time to Visit</h3>
-                  <p className="text-gray-700">{destination.best_time_to_visit}</p>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-3">Highlights</h3>
+                  <ul className="space-y-2">
+                    {destination.highlights.map((highlight, index) => (
+                      <li key={index} className="flex items-center">
+                        <div className="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
+                        <span className="text-gray-700">{highlight}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-2">Difficulty Level</h3>
-                  <span className={`px-3 py-1 rounded-full text-sm font-medium ${getDifficultyColor(destination.difficulty_level)}`}>
-                    {destination.difficulty_level}
-                  </span>
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900 mb-2">Accessibility</h3>
-                  <p className="text-gray-700">{destination.accessibility}</p>
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900 mb-2">Drive Time</h3>
-                  <p className="text-gray-700">{formatDriveTime(destination.drive_time)} from Salt Lake City</p>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-3">Activities</h3>
+                  <ul className="space-y-2">
+                    {destination.activities.map((activity, index) => (
+                      <li key={index} className="flex items-center">
+                        <div className="w-2 h-2 bg-green-500 rounded-full mr-3"></div>
+                        <span className="text-gray-700">{activity}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
             </div>
 
-            {/* Tips */}
-            {destination.tips && destination.tips.length > 0 && (
-              <div className="bg-white rounded-lg shadow-md p-6">
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">Tips & Advice</h2>
-                <ul className="space-y-2">
-                  {destination.tips.map((tip, index) => (
-                    <li key={index} className="flex items-start space-x-2">
-                      <Star className="w-4 h-4 text-yellow-500 mt-0.5 flex-shrink-0" />
-                      <span className="text-gray-700">{tip}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
-            {/* Nearby Attractions */}
-            {destination.nearby_attractions && destination.nearby_attractions.length > 0 && (
-              <div className="bg-white rounded-lg shadow-md p-6">
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">Nearby Attractions</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {destination.nearby_attractions.map((attraction, index) => (
-                    <div key={index} className="flex items-center space-x-2">
-                      <MapPin className="w-4 h-4 text-blue-500" />
-                      <span className="text-gray-700">{attraction}</span>
-                    </div>
-                  ))}
+            {/* Local Tips */}
+            <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">Local Tips</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-3">Packing List</h3>
+                  <ul className="space-y-2">
+                    {destination.packingList.map((item, index) => (
+                      <li key={index} className="flex items-center">
+                        <div className="w-2 h-2 bg-yellow-500 rounded-full mr-3"></div>
+                        <span className="text-gray-700">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-3">Pro Tips</h3>
+                  <ul className="space-y-2">
+                    {destination.localTips.map((tip, index) => (
+                      <li key={index} className="flex items-center">
+                        <div className="w-2 h-2 bg-purple-500 rounded-full mr-3"></div>
+                        <span className="text-gray-700">{tip}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
-            )}
+            </div>
           </div>
 
           {/* Sidebar */}
           <div className="space-y-6">
-            {/* Quick Actions */}
+            {/* Quick Facts */}
             <div className="bg-white rounded-lg shadow-md p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Facts</h3>
               <div className="space-y-3">
-                <button className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center space-x-2">
-                  <Navigation className="w-4 h-4" />
-                  <span>Get Directions</span>
-                </button>
-                <button className="w-full bg-gray-200 text-gray-800 py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors flex items-center justify-center space-x-2">
-                  <Share2 className="w-4 h-4" />
-                  <span>Share Location</span>
-                </button>
-                <button className="w-full bg-gray-200 text-gray-800 py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors flex items-center justify-center space-x-2">
-                  <Heart className="w-4 h-4" />
-                  <span>Add to Favorites</span>
-                </button>
+                <div className="flex items-center">
+                  <MapPin className="w-5 h-5 text-gray-400 mr-3" />
+                  <span className="text-gray-700">{destination.address}</span>
+                </div>
+                <div className="flex items-center">
+                  <Clock className="w-5 h-5 text-gray-400 mr-3" />
+                  <span className="text-gray-700">{destination.driveTime} minutes from Salt Lake City</span>
+                </div>
+                <div className="flex items-center">
+                  <Star className="w-5 h-5 text-gray-400 mr-3" />
+                  <span className="text-gray-700">{destination.rating} out of 5 stars</span>
+                </div>
+                {destination.website && (
+                  <div className="flex items-center">
+                    <Globe className="w-5 h-5 text-gray-400 mr-3" />
+                    <a href={destination.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                      Visit Website
+                    </a>
+                  </div>
+                )}
+                {destination.phone && (
+                  <div className="flex items-center">
+                    <Phone className="w-5 h-5 text-gray-400 mr-3" />
+                    <a href={`tel:${destination.phone}`} className="text-blue-600 hover:underline">
+                      {destination.phone}
+                    </a>
+                  </div>
+                )}
+                {destination.hours && (
+                  <div className="flex items-center">
+                    <Calendar className="w-5 h-5 text-gray-400 mr-3" />
+                    <span className="text-gray-700">{destination.hours}</span>
+                  </div>
+                )}
+                {destination.priceRange && (
+                  <div className="flex items-center">
+                    <span className="text-gray-700 font-semibold">{destination.priceRange}</span>
+                  </div>
+                )}
               </div>
             </div>
 
-            {/* Status */}
+            {/* Amenities */}
             <div className="bg-white rounded-lg shadow-md p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Status</h3>
-              <div className="flex items-center justify-between">
-                <span className="text-gray-600">Current Status</span>
-                <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                  destination.status === 'active' 
-                    ? 'bg-green-100 text-green-800' 
-                    : 'bg-gray-100 text-gray-800'
-                }`}>
-                  {destination.status}
-                </span>
-              </div>
-            </div>
-
-            {/* Map Placeholder */}
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Location</h3>
-              <div className="bg-gray-200 rounded-lg h-48 flex items-center justify-center">
-                <div className="text-center text-gray-500">
-                  <MapPin className="w-8 h-8 mx-auto mb-2" />
-                  <p>Map coming soon</p>
-                  <p className="text-sm">Lat: {destination.latitude}</p>
-                  <p className="text-sm">Lng: {destination.longitude}</p>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Amenities</h3>
+              <div className="grid grid-cols-2 gap-3">
+                {destination.isFamilyFriendly && (
+                  <div className="flex items-center">
+                    <Baby className="w-5 h-5 text-green-600 mr-2" />
+                    <span className="text-sm text-gray-700">Family Friendly</span>
+                  </div>
+                )}
+                {destination.isPetFriendly && (
+                  <div className="flex items-center">
+                    <Dog className="w-5 h-5 text-blue-600 mr-2" />
+                    <span className="text-sm text-gray-700">Pet Friendly</span>
+                  </div>
+                )}
+                {destination.hasRestrooms && (
+                  <div className="flex items-center">
+                    <Coffee className="w-5 h-5 text-purple-600 mr-2" />
+                    <span className="text-sm text-gray-700">Restrooms</span>
+                  </div>
+                )}
+                {destination.hasPlayground && (
+                  <div className="flex items-center">
+                    <Users className="w-5 h-5 text-yellow-600 mr-2" />
+                    <span className="text-sm text-gray-700">Playground</span>
+                  </div>
+                )}
+                {destination.parkingFree && (
+                  <div className="flex items-center">
+                    <Car className="w-5 h-5 text-green-600 mr-2" />
+                    <span className="text-sm text-gray-700">Free Parking</span>
+                  </div>
+                )}
+                <div className="flex items-center">
+                  <Camera className="w-5 h-5 text-red-600 mr-2" />
+                  <span className="text-sm text-gray-700">Photo Opportunities</span>
                 </div>
               </div>
             </div>
+
+            {/* Nearby Attractions */}
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Nearby Attractions</h3>
+              <ul className="space-y-2">
+                {destination.nearbyAttractions.map((attraction, index) => (
+                  <li key={index} className="flex items-center">
+                    <div className="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
+                    <span className="text-sm text-gray-700">{attraction}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Special Badges */}
+            {(destination.isOlympicVenue || destination.isFeatured) && (
+              <div className="bg-white rounded-lg shadow-md p-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Special Recognition</h3>
+                <div className="space-y-2">
+                  {destination.isOlympicVenue && (
+                    <div className="flex items-center p-3 bg-yellow-100 rounded-lg">
+                      <span className="text-2xl mr-2">🏅</span>
+                      <span className="text-sm font-semibold text-yellow-800">Olympic Venue</span>
+                    </div>
+                  )}
+                  {destination.isFeatured && (
+                    <div className="flex items-center p-3 bg-blue-100 rounded-lg">
+                      <Star className="w-5 h-5 text-blue-600 mr-2" />
+                      <span className="text-sm font-semibold text-blue-800">Featured Destination</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Affiliate Recommendations */}
-        <div className="mt-8">
-          <AffiliateRecommendations 
-            destinationId={destination.id}
-            maxItems={6}
-            showUtahSpecific={true}
-          />
+        {/* Back Button */}
+        <div className="mt-8 text-center">
+          <button
+            onClick={() => setLocation("/destinations")}
+            className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors duration-200"
+          >
+            Back to All Destinations
+          </button>
         </div>
       </div>
     </div>
