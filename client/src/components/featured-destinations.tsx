@@ -26,6 +26,13 @@ interface Destination {
 export function FeaturedDestinations() {
   const { destinations, loading, error } = useFeaturedDestinations();
 
+  console.log('🎯 FeaturedDestinations received:', {
+    destinationsCount: destinations.length,
+    loading,
+    error,
+    firstDestination: destinations[0]
+  });
+
   if (loading) {
     return (
       <div className="flex justify-center items-center py-8">
@@ -44,6 +51,8 @@ export function FeaturedDestinations() {
 
   // Show first 6 destinations as "Today's Picks"
   const todaysPicks = destinations.slice(0, 6);
+  
+  console.log('🎯 Today\'s picks:', todaysPicks.length, todaysPicks);
 
   return (
     <section className="py-12 bg-gradient-to-br from-blue-50 to-indigo-100">

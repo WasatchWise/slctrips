@@ -227,25 +227,32 @@ export const useFeaturedDestinations = () => {
     const fetchAllDestinations = async () => {
       try {
         setLoading(true);
+        console.log('🔄 Starting to fetch destinations from API...');
+        
         const response = await fetch('/api/destinations');
         
+        console.log('📡 API Response status:', response.status);
+        
         if (!response.ok) {
-          console.warn('API not accessible, using mock data');
+          console.warn('❌ API not accessible, using mock data');
           setDestinations(mockDestinations);
           setError(null);
           return;
         }
         
         const data = await response.json();
+        console.log('📦 Raw API data:', data);
         
         // Handle the API response format correctly
         const apiDestinations = data.destinations || [];
+        console.log('🎯 Extracted destinations:', apiDestinations.length);
         
         if (apiDestinations.length === 0) {
-          console.warn('No destinations in API response, using mock data');
+          console.warn('⚠️ No destinations in API response, using mock data');
           setDestinations(mockDestinations);
         } else {
-          console.log(`Loaded ${apiDestinations.length} destinations from API`);
+          console.log(`✅ Loaded ${apiDestinations.length} destinations from API`);
+          console.log('📋 First destination:', apiDestinations[0]);
           
           // Transform API data to include necessary fields for Bulls-Eye component
           const transformedDestinations = apiDestinations.map((dest: any) => ({
@@ -256,12 +263,15 @@ export const useFeaturedDestinations = () => {
             photos: dest.cover_photo_url ? [{ url: dest.cover_photo_url }] : []
           }));
           
+          console.log('🔄 Transformed destinations:', transformedDestinations.length);
+          console.log('📋 First transformed destination:', transformedDestinations[0]);
+          
           setDestinations(transformedDestinations);
         }
         
         setError(null);
       } catch (err) {
-        console.warn('API error, using mock data:', err);
+        console.warn('❌ API error, using mock data:', err);
         setDestinations(mockDestinations);
         setError(null);
       } finally {
