@@ -18,7 +18,7 @@ const RINGS = [
     buttonLabel: "30 minutes",
     time: "30 minutes or less",
     color: "#f4b441", // Pioneer Gold (30 min)
-    bgGradient: "#f4b441", // Solid Pioneer Gold
+    bgGradient: "linear-gradient(135deg, #f4b441 0%, #ffd700 50%, #f4b441 100%)", // Vibrant Gold Gradient
     size: 130,
     position: 1,
     examples: ["Temple Square", "Liberty Park", "Red Butte Garden"],
@@ -31,7 +31,7 @@ const RINGS = [
     buttonLabel: "90 minutes",
     time: "90 minutes or less",
     color: "#b33c1a", // Canyon Red (90 min)
-    bgGradient: "#b33c1a", // Solid Canyon Red
+    bgGradient: "linear-gradient(135deg, #b33c1a 0%, #ff6b35 50%, #b33c1a 100%)", // Vibrant Red Gradient
     size: 200,
     position: 2,
     examples: ["Park City", "Antelope Island", "Timpanogos Cave"],
@@ -44,7 +44,7 @@ const RINGS = [
     buttonLabel: "3 hours",
     time: "Regional adventures",
     color: "#0087c8", // Great Salt Blue (3 hours)
-    bgGradient: "#0087c8", // Solid Great Salt Blue
+    bgGradient: "linear-gradient(135deg, #0087c8 0%, #00bfff 50%, #0087c8 100%)", // Vibrant Blue Gradient
     size: 280,
     position: 3,
     examples: ["Moab Area", "Capitol Reef", "Goblin Valley"],
@@ -57,7 +57,7 @@ const RINGS = [
     buttonLabel: "5 hours",
     time: "Day trip destinations",
     color: "#2e8b57", // Sea Green (5 hours)
-    bgGradient: "#2e8b57", // Solid Sea Green
+    bgGradient: "linear-gradient(135deg, #2e8b57 0%, #00ff7f 50%, #2e8b57 100%)", // Vibrant Green Gradient
     size: 360,
     position: 4,
     examples: ["Zion National Park", "Bryce Canyon", "Lake Powell"],
@@ -70,7 +70,7 @@ const RINGS = [
     buttonLabel: "8 hours",
     time: "Weekend getaways",
     color: "#6a1b9a", // Deep Purple (8 hours)
-    bgGradient: "#6a1b9a", // Solid Deep Purple
+    bgGradient: "linear-gradient(135deg, #6a1b9a 0%, #9c27b0 50%, #6a1b9a 100%)", // Vibrant Purple Gradient
     size: 440,
     position: 5,
     examples: ["Extended weekend trips", "Multi-state adventures"],
@@ -83,7 +83,7 @@ const RINGS = [
     buttonLabel: "12 hours",
     time: "Extended adventures",
     color: "#ff9800", // Burnt Orange (12 hours)
-    bgGradient: "#ff9800", // Solid Burnt Orange
+    bgGradient: "linear-gradient(135deg, #ff9800 0%, #ff5722 50%, #ff9800 100%)", // Vibrant Orange Gradient
     size: 520,
     position: 6,
     examples: ["Arches", "Canyonlands", "Grand Canyon"],
@@ -314,8 +314,9 @@ export function BullsEyeExplorerSimple() {
             style={{
               width: `${ring.size}px`,
               height: `${ring.size}px`,
-              backgroundColor: selectedRing === ring.id ? `${ring.color}40` : `${ring.color}20`, // Higher opacity when selected
+              background: selectedRing === ring.id ? ring.bgGradient : ring.bgGradient.replace('100%)', '60%)'), // Use gradient with opacity
               borderColor: ring.color,
+              opacity: selectedRing === ring.id ? 0.9 : 0.7,
             }}
             onClick={() => handleRingClick(ring.id)}
           >
@@ -397,20 +398,52 @@ export function BullsEyeExplorerSimple() {
               top: `calc(50% + ${position.y}px)`,
             }}
           >
-            {/* Pin with pulse animation */}
+            {/* Pin with pulse animation and photo */}
             <div 
-              className="w-4 h-4 rounded-full shadow-lg group-hover:scale-150 transition-transform duration-200 relative"
+              className="w-6 h-6 rounded-full shadow-lg group-hover:scale-150 transition-transform duration-200 relative overflow-hidden"
               style={{ backgroundColor: pinColor }}
             >
+              {/* Destination photo */}
+              <img 
+                src={destination.image_url || destination.photo_url || `https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=100&h=100&fit=crop&crop=face`}
+                alt={destination.name}
+                className="w-full h-full object-cover rounded-full"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.src = `https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=100&h=100&fit=crop&crop=face`;
+                }}
+              />
               {/* Pulse effect */}
               <div className="absolute inset-0 rounded-full animate-ping opacity-75" style={{ backgroundColor: pinColor }}></div>
+              {/* Border */}
+              <div className="absolute inset-0 rounded-full border-2 border-white"></div>
             </div>
             
-            {/* Pin label */}
-            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1 bg-white text-xs rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10">
-              <div className="font-semibold">{destination.name}</div>
-              <div className="text-gray-600">{destination.category}</div>
-              <div className="text-gray-500">{driveTime} min</div>
+            {/* Enhanced pin label with photo */}
+            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 bg-white text-xs rounded-lg shadow-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10 min-w-[200px]">
+              <div className="p-2">
+                <div className="flex items-center space-x-2 mb-2">
+                  <img 
+                    src={destination.image_url || destination.photo_url || `https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=50&h=50&fit=crop&crop=face`}
+                    alt={destination.name}
+                    className="w-8 h-8 rounded object-cover"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = `https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=50&h=50&fit=crop&crop=face`;
+                    }}
+                  />
+                  <div>
+                    <div className="font-semibold text-gray-800">{destination.name}</div>
+                    <div className="text-gray-600 text-xs">{destination.category}</div>
+                  </div>
+                </div>
+                <div className="flex justify-between items-center text-xs">
+                  <span className="text-gray-500">{driveTime} min drive</span>
+                  <span className="px-2 py-1 rounded-full text-white text-xs" style={{ backgroundColor: pinColor }}>
+                    {destination.subcategory || 'Destination'}
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         );
