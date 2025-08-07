@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: slctrips-api
+    env: node
+    buildCommand: npm install && cd client && npm install && npm run build
+    startCommand: npm run start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: SUPABASE_URL
+        sync: false
+      - key: DANIEL_SUPABASE_ANON_KEY
+        sync: false
+      - key: DATABASE_URL
+        sync: false
