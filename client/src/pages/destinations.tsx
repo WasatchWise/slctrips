@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
+import { useLocation } from "wouter";
 import { fetchDestinations, Destination } from "../utils/destinationData";
 
 export default function Destinations() {
+  const [location, setLocation] = useLocation();
   const [destinations, setDestinations] = useState<Destination[]>([]);
   const [filteredDestinations, setFilteredDestinations] = useState<Destination[]>([]);
   const [loading, setLoading] = useState(true);
@@ -12,8 +14,33 @@ export default function Destinations() {
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
   // Categories and subcategories
-  const categories = ["All", "Downtown & Nearby", "Golf", "National Parks", "State Parks", "Ski Resorts", "Hiking", "Lakes & Water", "Historical"];
+  const categories = ["All", "Downtown & Nearby", "Less than 90 Minutes", "Less than 3 Hours", "Less than 5 Hours", "Less than 8 Hours", "Less than 12 Hours", "A little bit farther"];
   const subcategories = ["All", "Cultural", "Golf Courses", "National Parks & Monuments", "State Parks", "Skiing", "Hiking Trails", "Water Recreation", "Historical Sites"];
+
+  // Parse URL parameters on component mount
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const categoryParam = urlParams.get('category');
+    const timeParam = urlParams.get('time');
+    
+    if (categoryParam) {
+      setSelectedCategory(decodeURIComponent(categoryParam));
+    } else if (timeParam) {
+      // Handle time-based filtering from bulls-eye
+      const timeToCategory: Record<string, string> = {
+        '30min': 'Downtown & Nearby',
+        '90min': 'Less than 90 Minutes', 
+        '3hr': 'Less than 3 Hours',
+        '5hr': 'Less than 5 Hours',
+        '8hr': 'Less than 8 Hours',
+        '12hr': 'Less than 12 Hours'
+      };
+      const category = timeToCategory[timeParam];
+      if (category) {
+        setSelectedCategory(category);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     // Fetch destinations from Supabase or use comprehensive generated data
@@ -75,6 +102,17 @@ export default function Destinations() {
     setFilteredDestinations(filtered);
   }, [destinations, searchTerm, selectedCategory, selectedSubcategory, sortBy, sortOrder]);
 
+  // Update URL when category changes
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category);
+    const newParams = new URLSearchParams();
+    if (category && category !== "All") {
+      newParams.set('category', category);
+    }
+    const newUrl = `/destinations${newParams.toString() ? '?' + newParams.toString() : ''}`;
+    setLocation(newUrl);
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -121,7 +159,7 @@ export default function Destinations() {
               </label>
               <select
                 value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
+                onChange={(e) => handleCategoryChange(e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 {categories.map(category => (

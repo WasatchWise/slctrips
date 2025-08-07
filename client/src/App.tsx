@@ -45,6 +45,8 @@ export default function App() {
           <Route path="/terms" component={Terms} />
           <Route path="/privacy" component={Privacy} />
           
+
+          
           {/* 404 Fallback */}
           <Route component={() => <div className="p-8 text-center">Page not found</div>} />
         </Switch>

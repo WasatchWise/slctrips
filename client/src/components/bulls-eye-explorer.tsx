@@ -115,7 +115,22 @@ export function BullsEyeExplorer() {
 
   const handleRingClick = (ringId: string) => {
     setActiveRing(ringId);
-    setLocation(`/destinations?time=${ringId}`);
+    
+    const categoryMap: Record<string, string> = {
+      "30min": "Downtown & Nearby",
+      "90min": "Less than 90 Minutes", 
+      "3hr": "Less than 3 Hours",
+      "5hr": "Less than 5 Hours",
+      "8hr": "Less than 8 Hours",
+      "12hr": "Less than 12 Hours"
+    };
+    
+    const category = categoryMap[ringId];
+    if (category) {
+      setLocation(`/destinations?category=${encodeURIComponent(category)}`);
+    } else {
+      setLocation(`/destinations?time=${ringId}`);
+    }
   };
 
   const activeRingData = activeRing ? RINGS.find(ring => ring.id === activeRing) : null;

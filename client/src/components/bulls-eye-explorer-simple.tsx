@@ -197,6 +197,7 @@ export function BullsEyeExplorerSimple() {
   const [selectedRing, setSelectedRing] = useState<string | null>(null);
   const [hoveredDestination, setHoveredDestination] = useState<any | null>(null);
   const [todaysPicks, setTodaysPicks] = useState<any[]>([]);
+  const [location, setLocation] = useLocation();
 
   // Get today's rotating picks when destinations load
   useEffect(() => {
@@ -241,6 +242,23 @@ export function BullsEyeExplorerSimple() {
         default: return true;
       }
     });
+  };
+
+  // Handle ring click to navigate to destinations page
+  const handleRingClick = (ringId: string) => {
+    const categoryMap: Record<string, string> = {
+      '30min': 'Downtown & Nearby',
+      '90min': 'Less than 90 Minutes',
+      '3hr': 'Less than 3 Hours',
+      '5hr': 'Less than 5 Hours',
+      '8hr': 'Less than 8 Hours',
+      '12hr': 'Less than 12 Hours'
+    };
+    
+    const category = categoryMap[ringId];
+    if (category) {
+      setLocation(`/destinations?category=${encodeURIComponent(category)}`);
+    }
   };
 
   return (
@@ -299,7 +317,7 @@ export function BullsEyeExplorerSimple() {
               backgroundColor: selectedRing === ring.id ? `${ring.color}40` : `${ring.color}20`, // Higher opacity when selected
               borderColor: ring.color,
             }}
-            onClick={() => setSelectedRing(selectedRing === ring.id ? null : ring.id)}
+            onClick={() => handleRingClick(ring.id)}
           >
             {/* Ring label */}
             <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-white px-3 py-1 rounded-full shadow-lg border border-gray-200">
@@ -340,7 +358,7 @@ export function BullsEyeExplorerSimple() {
                 selectedRing === ring.id ? 'ring-2 ring-white scale-110' : ''
               }`}
               style={{ backgroundColor: ring.color }}
-              onClick={() => setSelectedRing(selectedRing === ring.id ? null : ring.id)}
+              onClick={() => handleRingClick(ring.id)}
             >
               {ring.buttonLabel}
             </button>

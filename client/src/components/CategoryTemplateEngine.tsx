@@ -13,13 +13,7 @@ import SeasonalEventsTemplate from './category-templates/SeasonalEventsTemplate'
 import QuickEscapesTemplate from './category-templates/QuickEscapesTemplate';
 import YouthFamilyTemplate from './category-templates/YouthFamilyTemplate';
 
-interface Destination {
-  name: string;
-  description?: string;
-  driveTime?: number;
-  subcategory?: string;
-  [key: string]: unknown;
-}
+import { Destination } from '../types/template-types';
 
 interface CategoryTemplateEngineProps {
   destination: Destination;
@@ -50,7 +44,7 @@ const GenericDestinationTemplate: React.FC<{ destination: Destination }> = ({ de
   <div className="generic-template">
     <h1>{destination.name}</h1>
     <p>{destination.description}</p>
-    <p>Drive time: {destination.driveTime} minutes from SLC</p>
+    <p>Drive time: {destination.drive_minutes || 'Unknown'} minutes from SLC</p>
   </div>
 );
 

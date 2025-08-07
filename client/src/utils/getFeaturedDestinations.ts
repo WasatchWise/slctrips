@@ -227,7 +227,8 @@ export const useFeaturedDestinations = () => {
     const fetchAllDestinations = async () => {
       try {
         setLoading(true);
-        console.log('🔄 Starting to fetch destinations from API...');
+        console.log('🚨 DEBUGGING: Starting to fetch destinations from API...');
+        console.log('🚨 DEBUGGING: This should appear in browser console');
         
         const response = await fetch('/api/destinations');
         

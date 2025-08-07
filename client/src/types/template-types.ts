@@ -4,20 +4,26 @@
 export interface Destination {
   id: string;
   name: string;
+  slug: string;
+  latitude: number;
+  longitude: number;
+  county: string;
+  region: string;
+  category: string;
+  subcategory?: string;
+  created_at: string;
+  updated_at: string;
+  is_verified?: boolean;
+  address_full?: string;
+  place_id?: string;
+  featured?: boolean;
+  drive_minutes?: number;
+  distance_miles?: number;
+  // Optional fields that might exist
   description?: string;
   description_short?: string;
   description_long?: string;
-  category: string;
-  subcategory?: string;
-  driveTime: number;
-  county: string;
-  region: string;
   image_url?: string;
-  address?: string;
-  coordinates?: {
-    lat: number;
-    lng: number;
-  };
   insider_story?: string;
   pro_tip?: string;
   venue_type?: string;
@@ -76,6 +82,7 @@ export interface TemplateColors {
 
 export interface WeatherData {
   current_temp: number;
+  temperature: number; // Add this for compatibility
   conditions: string;
   recommendation: string;
   recommendation_class: string;
