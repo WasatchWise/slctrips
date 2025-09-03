@@ -3,6 +3,8 @@
  * Syncs authentic photos from Daniel's Supabase database directly to local database
  */
 
+import { SUPABASE_URL, DANIEL_SUPABASE_ANON_KEY, DATABASE_URL } from './config';
+
 interface SupabaseDestination {
   destination_id: number;
   name: string;
@@ -20,15 +22,15 @@ export class DirectSupabaseSync {
 
   async initializeConnections() {
     // Initialize Supabase connection to Daniel's database
-    const { createClient } = await import('@supabase/supabase-js');
-    this.supabase = createClient(
-      process.env.SUPABASE_URL!,
-      process.env.DANIEL_SUPABASE_ANON_KEY!
-    );
+      const { createClient } = await import('@supabase/supabase-js');
+      this.supabase = createClient(
+        SUPABASE_URL,
+        DANIEL_SUPABASE_ANON_KEY
+      );
 
     // Initialize local database connection
-    const { neon } = await import('@neondatabase/serverless');
-    this.localDb = neon(process.env.DATABASE_URL!);
+      const { neon } = await import('@neondatabase/serverless');
+      this.localDb = neon(DATABASE_URL);
   }
 
   async syncPhotosFromSupabase(limit?: number): Promise<{

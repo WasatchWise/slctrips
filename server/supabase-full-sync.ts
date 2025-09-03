@@ -7,9 +7,7 @@ import { createClient } from '@supabase/supabase-js';
 import { db } from './db';
 import { destinations } from '@shared/schema';
 import { eq } from 'drizzle-orm';
-
-const supabaseUrl = process.env.SUPABASE_URL || '';
-const supabaseKey = process.env.DANIEL_SUPABASE_ANON_KEY || '';
+import { SUPABASE_URL, DANIEL_SUPABASE_ANON_KEY } from './config';
 
 export interface SupabaseDestination {
   id: string;
@@ -56,7 +54,7 @@ export class SupabaseFullSync {
   private errors: string[] = [];
 
   constructor() {
-    this.supabase = createClient(supabaseUrl, supabaseKey);
+    this.supabase = createClient(SUPABASE_URL, DANIEL_SUPABASE_ANON_KEY);
   }
 
   /**

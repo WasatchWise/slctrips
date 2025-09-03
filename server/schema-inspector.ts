@@ -5,6 +5,7 @@
  */
 
 import { createClient } from '@supabase/supabase-js';
+import { SUPABASE_URL, DANIEL_SUPABASE_ANON_KEY } from './config';
 
 interface ColumnInfo {
   column_name: string;
@@ -25,16 +26,16 @@ export class SchemaInspector {
 
   constructor() {
     // Main Supabase instance
-    this.supabase = createClient(
-      process.env.SUPABASE_URL!,
-      process.env.SUPABASE_ANON_KEY!
-    );
+      this.supabase = createClient(
+        SUPABASE_URL,
+        process.env.SUPABASE_ANON_KEY!
+      );
 
     // Daniel's database instance
-    this.danielSupabase = createClient(
-      process.env.SUPABASE_URL!,
-      process.env.DANIEL_SUPABASE_ANON_KEY!
-    );
+      this.danielSupabase = createClient(
+        SUPABASE_URL,
+        DANIEL_SUPABASE_ANON_KEY
+      );
   }
 
   /**

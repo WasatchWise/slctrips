@@ -1,22 +1,23 @@
 import express, { Request, Response } from 'express';
-import { config } from 'dotenv';
 import { createClient } from '@supabase/supabase-js';
 import { neon } from '@neondatabase/serverless';
-
-// Load environment variables
-config();
+import {
+  SUPABASE_URL,
+  DANIEL_SUPABASE_ANON_KEY,
+  DATABASE_URL
+} from './config';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Initialize Supabase client
 const supabase = createClient(
-  process.env.SUPABASE_URL!,
-  process.env.DANIEL_SUPABASE_ANON_KEY!
+  SUPABASE_URL,
+  DANIEL_SUPABASE_ANON_KEY
 );
 
 // Initialize database connection
-const db = neon(process.env.DATABASE_URL!);
+const db = neon(DATABASE_URL);
 
 // Middleware
 app.use(express.json());
@@ -36,9 +37,9 @@ app.get('/api/health', (req: Request, res: Response) => {
 // Test environment variables
 app.get('/api/env-test', (req: Request, res: Response) => {
   const envVars = {
-    DATABASE_URL: process.env.DATABASE_URL ? 'Set' : 'Not set',
-    SUPABASE_URL: process.env.SUPABASE_URL ? 'Set' : 'Not set',
-    DANIEL_SUPABASE_ANON_KEY: process.env.DANIEL_SUPABASE_ANON_KEY ? 'Set' : 'Not set',
+    DATABASE_URL: DATABASE_URL ? 'Set' : 'Not set',
+    SUPABASE_URL: SUPABASE_URL ? 'Set' : 'Not set',
+    DANIEL_SUPABASE_ANON_KEY: DANIEL_SUPABASE_ANON_KEY ? 'Set' : 'Not set',
     GOOGLE_PLACES_API_KEY: process.env.GOOGLE_PLACES_API_KEY ? 'Set' : 'Not set',
     OPENWEATHER_API_KEY: process.env.OPENWEATHER_API_KEY ? 'Set' : 'Not set'
   };
@@ -142,8 +143,8 @@ app.get('/', (req: Request, res: Response) => {
       
       <h2>Environment:</h2>
       <p>Environment: ${process.env.NODE_ENV || 'development'}</p>
-      <p>Database: ${process.env.DATABASE_URL ? 'Connected' : 'Not configured'}</p>
-      <p>Supabase: ${process.env.SUPABASE_URL ? 'Connected' : 'Not configured'}</p>
+      <p>Database: ${DATABASE_URL ? 'Connected' : 'Not configured'}</p>
+      <p>Supabase: ${SUPABASE_URL ? 'Connected' : 'Not configured'}</p>
       <p>Google Places: ${process.env.GOOGLE_PLACES_API_KEY ? 'Configured' : 'Not configured'}</p>
     </body>
     </html>

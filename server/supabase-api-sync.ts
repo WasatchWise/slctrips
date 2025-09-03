@@ -1,5 +1,6 @@
 import { db } from './db';
 import { destinations } from '@shared/schema';
+import { SUPABASE_URL } from './config';
 
 interface SupabaseDestination {
   id: number;
@@ -99,13 +100,13 @@ function mapSupabaseToDestination(supabaseDest: SupabaseDestination) {
 export async function syncSupabaseDestinationsAPI() {
   // console.log('🔄 Starting Supabase API sync...');
 
-  if (!process.env.SUPABASE_URL || !process.env.SUPABASE_ANON_KEY) {
+  if (!process.env.SUPABASE_ANON_KEY) {
     throw new Error('Supabase credentials not available');
   }
 
   try {
     // Fetch from the destinations table
-    const response = await fetch(`${process.env.SUPABASE_URL}/rest/v1/destinations?select=*`, {
+    const response = await fetch(`${SUPABASE_URL}/rest/v1/destinations?select=*`, {
       headers: {
         'apikey': process.env.SUPABASE_ANON_KEY,
         'Authorization': `Bearer ${process.env.SUPABASE_ANON_KEY}`,

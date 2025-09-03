@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
+import { SUPABASE_URL } from '../config';
 
 interface GearRecommendation {
   id: string;
@@ -36,11 +37,11 @@ class AIRecommendationService {
   private golfnowPartnerId: string;
   private turoAffiliateId: string;
 
-  constructor() {
-    this.supabase = createClient(
-      process.env.SUPABASE_URL!,
-      process.env.SUPABASE_ANON_KEY!
-    );
+    constructor() {
+      this.supabase = createClient(
+        SUPABASE_URL,
+        process.env.SUPABASE_ANON_KEY!
+      );
     this.amazonTag = process.env.AMAZON_ASSOCIATES_TAG || '';
     this.viatorAffiliateId = process.env.VIATOR_AFFILIATE_ID || '';
     this.golfnowPartnerId = process.env.GOLFNOW_PARTNER_ID || '';

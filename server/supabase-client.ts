@@ -4,18 +4,12 @@
  */
 
 import { createClient } from '@supabase/supabase-js';
+import { SUPABASE_URL } from './config';
 
 // Use environment variables only
-const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
 
 // Provide better error messages for missing environment variables
-if (!SUPABASE_URL) {
-  // console.error('❌ SUPABASE_URL environment variable is not set');
-  // console.error('Please check your .env file or environment configuration');
-  // Don't throw immediately, allow the app to start with limited functionality
-}
-
 if (!SUPABASE_ANON_KEY) {
   // console.error('❌ SUPABASE_ANON_KEY environment variable is not set');
   // console.error('Please check your .env file or environment configuration');

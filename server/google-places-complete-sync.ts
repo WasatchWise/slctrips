@@ -1,7 +1,9 @@
 /**
  * Complete Google Places Photo Sync System
  * CRITICAL MISSION: Get authentic photos for EVERY destination
- */
+*/
+
+import { DATABASE_URL } from './config';
 
 interface SyncResult {
   destinationId: string;
@@ -29,7 +31,7 @@ export class GooglePlacesCompleteSync {
 
   async initializeConnection() {
     const { neon } = await import('@neondatabase/serverless');
-    this.localDb = neon(process.env.DATABASE_URL!);
+    this.localDb = neon(DATABASE_URL);
   }
 
   async syncAllDestinationPhotos(): Promise<{

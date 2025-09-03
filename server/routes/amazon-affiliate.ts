@@ -3,11 +3,12 @@ import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 import { amazonAffiliateProducts } from '../../shared/schema.js';
 import { eq, ilike, or, inArray } from 'drizzle-orm';
+import { DATABASE_URL } from '../config';
 
 const router = Router();
 
 // Initialize database connection
-const connectionString = process.env.DATABASE_URL;
+const connectionString = DATABASE_URL;
 const sql = postgres(connectionString || '');
 const db = drizzle(sql);
 

@@ -1,16 +1,13 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from '../shared/supabase-types';
-
-if (!process.env.SUPABASE_URL) {
-  throw new Error("SUPABASE_URL must be set");
-}
+import { SUPABASE_URL } from './config';
 
 if (!process.env.SUPABASE_ANON_KEY) {
   throw new Error("SUPABASE_ANON_KEY must be set");
 }
 
 export const supabase = createClient<Database>(
-  process.env.SUPABASE_URL,
+  SUPABASE_URL,
   process.env.SUPABASE_ANON_KEY,
   {
     auth: {

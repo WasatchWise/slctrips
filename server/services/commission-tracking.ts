@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
+import { SUPABASE_URL } from '../config';
 
 interface CommissionRecord {
   id: string;
@@ -48,11 +49,11 @@ class CommissionTrackingService {
   private supabase: any;
   private commissionRates: { [key: string]: number };
 
-  constructor() {
-    this.supabase = createClient(
-      process.env.SUPABASE_URL!,
-      process.env.SUPABASE_ANON_KEY!
-    );
+    constructor() {
+      this.supabase = createClient(
+        SUPABASE_URL,
+        process.env.SUPABASE_ANON_KEY!
+      );
     
     this.commissionRates = {
       viator: parseFloat(process.env.COMMISSION_RATE_VIATOR || '0.08'),
