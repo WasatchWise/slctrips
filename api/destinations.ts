@@ -1,5 +1,6 @@
 import express from "express";
 import { createClient } from '@supabase/supabase-js';
+import { DANIEL_SUPABASE_ANON_KEY } from '../server/config';
 
 const app = express();
 app.use(express.json());
@@ -8,18 +9,18 @@ app.get("/api/destinations", async (req, res) => {
   try {
     console.log('Destinations API called');
     console.log('Environment variables:', {
-      hasSupabaseUrl: !!process.env.SUPABASE_URL,
-      hasSupabaseKey: !!process.env.DANIEL_SUPABASE_ANON_KEY,
+        hasSupabaseUrl: !!process.env.SUPABASE_URL,
+        hasSupabaseKey: !!DANIEL_SUPABASE_ANON_KEY,
       environment: process.env.NODE_ENV
     });
     
     const { limit = "50", offset = "0", category, search } = req.query;
     
     console.log('Creating Supabase client...');
-    const supabase = createClient(
-      process.env.SUPABASE_URL!,
-      process.env.DANIEL_SUPABASE_ANON_KEY!
-    );
+      const supabase = createClient(
+        process.env.SUPABASE_URL!,
+        DANIEL_SUPABASE_ANON_KEY
+      );
     console.log('Supabase client created successfully');
 
     console.log('Building query...');

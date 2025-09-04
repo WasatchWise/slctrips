@@ -5,6 +5,7 @@
 
 import axios from 'axios';
 import { storage } from './storage';
+import { DANIEL_SUPABASE_ANON_KEY } from './config';
 
 interface GooglePlacesPhoto {
   height: number;
@@ -325,10 +326,10 @@ export class PhotoEnrichmentSystem {
     try {
       // Use Supabase directly instead of storage.query
       const { createClient } = await import('@supabase/supabase-js');
-      const supabase = createClient(
-        process.env.SUPABASE_URL!,
-        process.env.DANIEL_SUPABASE_ANON_KEY!
-      );
+        const supabase = createClient(
+          process.env.SUPABASE_URL!,
+          DANIEL_SUPABASE_ANON_KEY
+        );
 
       const { count: total } = await supabase
         .from('destinations')
