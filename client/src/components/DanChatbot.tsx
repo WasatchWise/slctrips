@@ -45,11 +45,8 @@ export default function DanChatbot() {
 
   const chatMutation = useMutation({
     mutationFn: async (userMessage: string) => {
-      return await apiRequest("/api/chat/dan", {
-        method: "POST",
-        body: JSON.stringify({ message: userMessage }),
-        headers: { "Content-Type": "application/json" }
-      });
+      const response = await apiRequest("POST", "/api/chat/dan", { message: userMessage });
+      return await response.json();
     },
     onSuccess: (response: { message?: string; suggestions?: string[]; destinations?: Array<{ id: number; name: string; category: string; driveTime: string; distance: string }> }) => {
       const danMessage: ChatMessage = {

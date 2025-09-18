@@ -1,0 +1,44 @@
+export default {
+  apps: [
+    {
+      name: 'slctrips-server',
+      script: 'npx',
+      args: 'tsx server/index.ts',
+      cwd: '/home/user/webapp',
+      instances: 1,
+      autorestart: true,
+      watch: ['server/**/*.ts', 'shared/**/*.ts'],
+      max_memory_restart: '1G',
+      env: {
+        NODE_ENV: 'development',
+        PORT: 3000
+      },
+      env_production: {
+        NODE_ENV: 'production',
+        PORT: 3000
+      },
+      log_file: './logs/server.log',
+      out_file: './logs/server-out.log',
+      error_file: './logs/server-error.log',
+      time: true
+    },
+    {
+      name: 'slctrips-client',
+      script: 'npm',
+      args: 'run dev',
+      cwd: '/home/user/webapp/client',
+      instances: 1,
+      autorestart: true,
+      watch: false, // Vite has its own file watching
+      max_memory_restart: '500M',
+      env: {
+        NODE_ENV: 'development',
+        PORT: 5173
+      },
+      log_file: './logs/client.log',
+      out_file: './logs/client-out.log', 
+      error_file: './logs/client-error.log',
+      time: true
+    }
+  ]
+}

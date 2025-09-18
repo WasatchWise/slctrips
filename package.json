@@ -4,18 +4,26 @@
   "private": true,
   "type": "module",
   "engines": {
-    "node": ">=22.0.0",
+    "node": ">=20.0.0",
     "npm": ">=10.0.0"
   },
   "scripts": {
     "dev": "tsx watch server/index.ts",
     "dev:frontend": "cd client && vite",
     "dev:simple": "tsx watch server/simple-server.ts",
+    "dev:all": "pm2 start ecosystem.config.json",
+    "dev:stop": "pm2 stop all",
+    "dev:restart": "pm2 restart all",
+    "dev:logs": "pm2 logs --nostream",
+    "dev:status": "pm2 status",
     "build": "cd client && vite build",
+    "build:server": "tsc --project . --outDir dist",
+    "build:all": "npm run build && npm run build:server",
     "start": "node dist/server/index.js",
     "lint": "eslint . --ext .ts,.tsx --fix",
     "lint:fix": "eslint . --ext .ts,.tsx --fix",
-    "type-check": "tsc --noEmit",
+    "type-check": "tsc --noEmit --skipLibCheck",
+    "type-check:client": "cd client && tsc --noEmit --skipLibCheck",
     "test": "vitest",
     "test:watch": "vitest --watch",
     "supabase:pull": "supabase db pull",
@@ -32,6 +40,7 @@
   },
   "dependencies": {
     "@cloudflare/workers-types": "^4.20231218.0",
+    "@neondatabase/serverless": "^0.9.4",
     "@notionhq/client": "^2.2.14",
     "@sendgrid/mail": "^8.1.5",
     "@supabase/supabase-js": "^2.39.0",
@@ -45,6 +54,8 @@
     "compression": "^1.7.4",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
+    "drizzle-orm": "^0.29.3",
+    "drizzle-zod": "^0.8.3",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.1.2",
@@ -56,10 +67,12 @@
     "stripe": "^14.25.0",
     "tsx": "^4.6.2",
     "typescript": "^5.3.3",
-    "vitest": "^1.0.4"
+    "vitest": "^1.0.4",
+    "zod": "^4.1.9"
   },
   "devDependencies": {
     "@types/stripe": "^8.0.417",
+    "pm2": "^6.0.11",
     "wrangler": "^3.22.1"
   }
 }

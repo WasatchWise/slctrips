@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { MapPin, Clock, Car, Users, Camera, Mountain, Utensils, Calendar, Shield, Route, Zap, Heart, Info, CheckCircle, AlertTriangle, MapIcon, Navigation, Music, Film, Gem, Sparkles } from "lucide-react";
+import { MapPin, Clock, Car, Users, Camera, Mountain, Utensils, Calendar, Shield, Router, Zap, Heart, Info, CheckCircle, AlertTriangle, MapIcon, Navigation, Music, Film, Gem, Sparkles } from "lucide-react";
 import { Link } from "wouter";
 import { DestinationTemplateType, getTemplateColors, getTemplateDisplayName } from "../utils/destination-template-detector";
 import { getDestinationPhoto } from '../utils/photo-enhancement';
