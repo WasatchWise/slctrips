@@ -3,6 +3,8 @@
  * Ensures every destination has a valid, authentic image
  */
 
+import { DATABASE_URL } from './config';
+
 interface PhotoValidationResult {
   destinationId: string;
   name: string;
@@ -27,7 +29,7 @@ export class PhotoAuditSystem {
 
   async initializeConnection() {
     const { neon } = await import('@neondatabase/serverless');
-    this.localDb = neon(process.env.DATABASE_URL!);
+    this.localDb = neon(DATABASE_URL);
   }
 
   async runCompletePhotoAudit(limit?: number): Promise<{

@@ -3,6 +3,8 @@
  * Gets real, authentic photos for each destination using Google Places API
  */
 
+import { DATABASE_URL } from './config';
+
 export class GooglePlacesAuthenticSync {
   private localDb: any;
   private processed: number = 0;
@@ -19,7 +21,7 @@ export class GooglePlacesAuthenticSync {
 
   async initializeConnection() {
     const { neon } = await import('@neondatabase/serverless');
-    this.localDb = neon(process.env.DATABASE_URL!);
+    this.localDb = neon(DATABASE_URL);
   }
 
   async syncAuthenticDestinationPhotos(limit?: number): Promise<{

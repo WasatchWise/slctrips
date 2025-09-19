@@ -3,14 +3,12 @@ import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 import { destinations } from '../../shared/schema.js';
 import { eq, ilike, or, desc, asc } from 'drizzle-orm';
+import { DATABASE_URL } from '../config';
 
 const router = Router();
 
 // Database connection
-const connectionString = process.env.DATABASE_URL;
-if (!connectionString) {
-  throw new Error('DATABASE_URL environment variable is required');
-}
+const connectionString = DATABASE_URL;
 
 const client = postgres(connectionString);
 const db = drizzle(client);

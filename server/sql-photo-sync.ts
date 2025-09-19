@@ -3,6 +3,8 @@
  * Direct database connection to pull authentic Unsplash photos
  */
 
+import { DATABASE_URL } from './config';
+
 export class SqlPhotoSync {
   private localDb: any;
   private processed: number = 0;
@@ -12,7 +14,7 @@ export class SqlPhotoSync {
 
   async initializeConnection() {
     const { neon } = await import('@neondatabase/serverless');
-    this.localDb = neon(process.env.DATABASE_URL!);
+    this.localDb = neon(DATABASE_URL);
   }
 
   async syncAuthenticPhotos(limit?: number): Promise<{

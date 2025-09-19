@@ -2,6 +2,7 @@ import pg from 'pg';
 const { Pool } = pg;
 import { db } from './db';
 import { destinations } from '@shared/schema';
+import { DATABASE_URL } from './config';
 
 interface SupabaseDestination {
   uuid: string;
@@ -123,7 +124,7 @@ export async function syncSupabaseDestinationsDirect() {
   // console.log('🔄 Starting direct Supabase PostgreSQL sync...');
   
   const supabasePool = new Pool({
-    connectionString: process.env.DATABASE_URL || 'postgresql://postgres:2025willbegreat!@db.unkfswfemslaeuqaxijg.supabase.co:5432/postgres',
+    connectionString: DATABASE_URL,
     ssl: { rejectUnauthorized: false }
   });
 

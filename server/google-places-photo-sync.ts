@@ -3,6 +3,8 @@
  * Syncs authentic photos from Google Places API to Supabase cover_photo_url field
  */
 
+import { SUPABASE_URL, DANIEL_SUPABASE_ANON_KEY } from './config';
+
 interface GooglePlacesResponse {
   candidates: Array<{
     place_id: string;
@@ -57,13 +59,13 @@ export class GooglePlacesPhotoSync {
     throw new Error('No Google Places API key found in environment variables');
   }
 
-  async initializeSupabase() {
-    const { createClient } = await import('@supabase/supabase-js');
-    this.supabase = createClient(
-      process.env.SUPABASE_URL!,
-      process.env.DANIEL_SUPABASE_ANON_KEY!
-    );
-  }
+    async initializeSupabase() {
+      const { createClient } = await import('@supabase/supabase-js');
+      this.supabase = createClient(
+        SUPABASE_URL,
+        DANIEL_SUPABASE_ANON_KEY
+      );
+    }
 
   async searchGooglePlaces(name: string, address: string): Promise<{ place_id: string; photo_reference?: string } | null> {
     try {

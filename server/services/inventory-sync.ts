@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
+import { SUPABASE_URL } from '../config';
 
 interface InventoryItem {
   id: string;
@@ -33,7 +34,7 @@ class InventorySyncService {
 
   constructor() {
     this.supabase = createClient(
-      process.env.SUPABASE_URL!,
+      SUPABASE_URL,
       process.env.SUPABASE_ANON_KEY!
     );
   }
