@@ -8,6 +8,7 @@ import { createClient } from '@supabase/supabase-js';
 import { neon } from '@neondatabase/serverless';
 import { Client } from '@googlemaps/google-maps-services-js';
 import * as readline from 'readline';
+import { DANIEL_SUPABASE_ANON_KEY } from '../server/config';
 
 interface SyncResult {
   destinationId: string;
@@ -35,10 +36,10 @@ class DailyPhotoSync {
 
   constructor() {
     // Initialize Supabase client
-    this.supabase = createClient(
-      process.env.SUPABASE_URL!,
-      process.env.DANIEL_SUPABASE_ANON_KEY!
-    );
+      this.supabase = createClient(
+        process.env.SUPABASE_URL!,
+        DANIEL_SUPABASE_ANON_KEY
+      );
 
     // Initialize local database connection
     this.localDb = neon(process.env.DATABASE_URL!);

@@ -9,6 +9,7 @@ import { photoEnrichmentSystem } from './photo-enrichment-system';
 import { photoVerificationSystem } from './photo-verification';
 import express from "express";
 import { Client } from '@googlemaps/google-maps-services-js';
+import { DANIEL_SUPABASE_ANON_KEY } from './config';
 
 // TypeScript interfaces
 interface WeatherData {
@@ -210,7 +211,7 @@ export function registerRoutes(app: Express): Server {
       console.log('Destinations API called');
       console.log('Environment variables:', {
         hasSupabaseUrl: !!process.env.SUPABASE_URL,
-        hasSupabaseKey: !!process.env.DANIEL_SUPABASE_ANON_KEY,
+        hasSupabaseKey: !!DANIEL_SUPABASE_ANON_KEY,
         environment: process.env.NODE_ENV
       });
       
@@ -219,7 +220,7 @@ export function registerRoutes(app: Express): Server {
       
       const supabase = createClient(
         process.env.SUPABASE_URL!,
-        process.env.DANIEL_SUPABASE_ANON_KEY!
+        DANIEL_SUPABASE_ANON_KEY
       );
 
       let query = supabase
@@ -280,7 +281,7 @@ export function registerRoutes(app: Express): Server {
       
       const supabase = createClient(
         process.env.SUPABASE_URL!,
-        process.env.DANIEL_SUPABASE_ANON_KEY!
+        DANIEL_SUPABASE_ANON_KEY
       );
 
       // Update all inactive destinations to active
@@ -348,7 +349,7 @@ export function registerRoutes(app: Express): Server {
       
       const supabase = createClient(
         process.env.SUPABASE_URL!,
-        process.env.DANIEL_SUPABASE_ANON_KEY!
+        DANIEL_SUPABASE_ANON_KEY
       );
 
       const { data, error } = await supabase
@@ -376,7 +377,7 @@ export function registerRoutes(app: Express): Server {
       
       const supabase = createClient(
         process.env.SUPABASE_URL!,
-        process.env.DANIEL_SUPABASE_ANON_KEY!
+        DANIEL_SUPABASE_ANON_KEY
       );
 
       let query = supabase
@@ -450,7 +451,7 @@ export function registerRoutes(app: Express): Server {
       const { createClient } = await import('@supabase/supabase-js');
       const supabase = createClient(
         process.env.SUPABASE_URL!,
-        process.env.DANIEL_SUPABASE_ANON_KEY!
+        DANIEL_SUPABASE_ANON_KEY
       );
 
       // Get basic stats
@@ -473,7 +474,7 @@ export function registerRoutes(app: Express): Server {
       const { createClient } = await import('@supabase/supabase-js');
       const supabase = createClient(
         process.env.SUPABASE_URL!,
-        process.env.DANIEL_SUPABASE_ANON_KEY!
+        DANIEL_SUPABASE_ANON_KEY
       );
 
       const { data, error } = await supabase

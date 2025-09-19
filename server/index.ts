@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import { config } from 'dotenv';
 import { createClient } from '@supabase/supabase-js';
 import { neon } from '@neondatabase/serverless';
+import { DANIEL_SUPABASE_ANON_KEY } from './config';
 
 // Load environment variables
 config();
@@ -12,7 +13,7 @@ const PORT = process.env.PORT || 3000;
 // Initialize Supabase client
 const supabase = createClient(
   process.env.SUPABASE_URL!,
-  process.env.DANIEL_SUPABASE_ANON_KEY!
+  DANIEL_SUPABASE_ANON_KEY
 );
 
 // Initialize database connection
@@ -35,13 +36,13 @@ app.get('/api/health', (req: Request, res: Response) => {
 
 // Test environment variables
 app.get('/api/env-test', (req: Request, res: Response) => {
-  const envVars = {
-    DATABASE_URL: process.env.DATABASE_URL ? 'Set' : 'Not set',
-    SUPABASE_URL: process.env.SUPABASE_URL ? 'Set' : 'Not set',
-    DANIEL_SUPABASE_ANON_KEY: process.env.DANIEL_SUPABASE_ANON_KEY ? 'Set' : 'Not set',
-    GOOGLE_PLACES_API_KEY: process.env.GOOGLE_PLACES_API_KEY ? 'Set' : 'Not set',
-    OPENWEATHER_API_KEY: process.env.OPENWEATHER_API_KEY ? 'Set' : 'Not set'
-  };
+    const envVars = {
+      DATABASE_URL: process.env.DATABASE_URL ? 'Set' : 'Not set',
+      SUPABASE_URL: process.env.SUPABASE_URL ? 'Set' : 'Not set',
+      DANIEL_SUPABASE_ANON_KEY: DANIEL_SUPABASE_ANON_KEY ? 'Set' : 'Not set',
+      GOOGLE_PLACES_API_KEY: process.env.GOOGLE_PLACES_API_KEY ? 'Set' : 'Not set',
+      OPENWEATHER_API_KEY: process.env.OPENWEATHER_API_KEY ? 'Set' : 'Not set'
+    };
   
   res.json({
     message: 'Environment variables check',

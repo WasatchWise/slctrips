@@ -1,4 +1,5 @@
 import express from "express";
+import { DANIEL_SUPABASE_ANON_KEY } from '../server/config';
 
 const app = express();
 app.use(express.json());
@@ -9,7 +10,7 @@ app.get("/api/health", async (req, res) => {
     timestamp: new Date().toISOString(),
     environment: process.env.NODE_ENV || 'development',
     hasSupabaseUrl: !!process.env.SUPABASE_URL,
-    hasSupabaseKey: !!process.env.DANIEL_SUPABASE_ANON_KEY,
+    hasSupabaseKey: !!DANIEL_SUPABASE_ANON_KEY,
     hasDatabaseUrl: !!process.env.DATABASE_URL,
     nodeVersion: process.version
   });

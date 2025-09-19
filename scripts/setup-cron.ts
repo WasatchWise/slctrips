@@ -9,6 +9,7 @@ import { exec } from 'child_process';
 import { promisify } from 'util';
 import * as fs from 'fs';
 import * as path from 'path';
+import { DANIEL_SUPABASE_ANON_KEY } from '../server/config';
 
 const execAsync = promisify(exec);
 
@@ -169,9 +170,9 @@ class CronSetup {
         env: {
           ...process.env,
           DATABASE_URL: process.env.DATABASE_URL,
-          SUPABASE_URL: process.env.SUPABASE_URL,
-          DANIEL_SUPABASE_ANON_KEY: process.env.DANIEL_SUPABASE_ANON_KEY,
-          GOOGLE_PLACES_API_KEY: process.env.GOOGLE_PLACES_API_KEY,
+            SUPABASE_URL: process.env.SUPABASE_URL,
+            DANIEL_SUPABASE_ANON_KEY,
+            GOOGLE_PLACES_API_KEY: process.env.GOOGLE_PLACES_API_KEY,
           OPENWEATHER_API_KEY: process.env.OPENWEATHER_API_KEY
         }
       });

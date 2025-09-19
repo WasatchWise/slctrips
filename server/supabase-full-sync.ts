@@ -7,9 +7,10 @@ import { createClient } from '@supabase/supabase-js';
 import { db } from './db';
 import { destinations } from '@shared/schema';
 import { eq } from 'drizzle-orm';
+import { DANIEL_SUPABASE_ANON_KEY } from './config';
 
 const supabaseUrl = process.env.SUPABASE_URL || '';
-const supabaseKey = process.env.DANIEL_SUPABASE_ANON_KEY || '';
+const supabaseKey = DANIEL_SUPABASE_ANON_KEY;
 
 export interface SupabaseDestination {
   id: string;
