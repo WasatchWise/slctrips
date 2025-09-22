@@ -1,6 +1,9 @@
 import { db } from './db';
 import { destinations } from '@shared/schema';
 
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseAnonKey = process.env.DANIEL_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY;
+
 interface SupabaseDestination {
   id: number;
   name: string;
@@ -99,16 +102,16 @@ function mapSupabaseToDestination(supabaseDest: SupabaseDestination) {
 export async function syncSupabaseDestinationsAPI() {
   // console.log('🔄 Starting Supabase API sync...');
 
-  if (!process.env.SUPABASE_URL || !process.env.SUPABASE_ANON_KEY) {
+  if (!supabaseUrl || !supabaseAnonKey) {
     throw new Error('Supabase credentials not available');
   }
 
   try {
     // Fetch from the destinations table
-    const response = await fetch(`${process.env.SUPABASE_URL}/rest/v1/destinations?select=*`, {
+    const response = await fetch(`${supabaseUrl}/rest/v1/destinations?select=*`, {
       headers: {
-        'apikey': process.env.SUPABASE_ANON_KEY,
-        'Authorization': `Bearer ${process.env.SUPABASE_ANON_KEY}`,
+        'apikey': supabaseAnonKey,
+        'Authorization': `Bearer ${supabaseAnonKey}`,
         'Content-Type': 'application/json'
       }
     });

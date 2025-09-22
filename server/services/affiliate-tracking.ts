@@ -1,5 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
 
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseAnonKey = process.env.DANIEL_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY;
+
 interface AffiliateClick {
   id: string;
   tripkit_id?: string;
@@ -37,8 +40,8 @@ class AffiliateTrackingService {
 
   constructor() {
     this.supabase = createClient(
-      process.env.SUPABASE_URL!,
-      process.env.SUPABASE_ANON_KEY!
+      supabaseUrl!,
+      supabaseAnonKey!
     );
     this.sessionId = this.generateSessionId();
   }
