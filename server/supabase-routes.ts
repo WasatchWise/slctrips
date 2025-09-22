@@ -6,15 +6,195 @@
 import { Express } from 'express';
 import { supabaseStorage } from './supabase-storage';
 
+const DEFAULT_LIST_LIMIT = 100;
+const MAX_LIST_LIMIT = 1000;
+const FESTIVAL_FLAG_FIELDS = [
+  "isFestival",
+  "is_festival",
+  "isEvent",
+  "is_event",
+  "festival",
+  "event"
+];
+const FESTIVAL_CATEGORY_FIELDS = [
+  "category",
+  "subcategory",
+  "type",
+  "destination_type",
+  "destinationType",
+  "experience_type",
+  "experienceType",
+  "primary_category",
+  "primary_subcategory",
+  "tier"
+];
+const FESTIVAL_KEYWORD_PATTERNS = [
+  /\bfestival(s)?\b/i,
+  /\bfest\b/i,
+  /\brodeo\b/i,
+  /\bpowwow\b/i,
+  /\bcarnival\b/i,
+  /\bparade\b/i,
+  /\bfair(s)?\b/i,
+  /\bcelebration(s)?\b/i,
+  /\bexpo\b/i,
+  /\bderby\b/i,
+  /\bjubilee\b/i
+];
+
+function parseNumberParam(value: unknown, defaultValue: number): number {
+  if (typeof value === "number" && Number.isFinite(value) && value >= 0) {
+    return value;
+  }
+
+  if (typeof value === "string") {
+    const trimmed = value.trim();
+    if (trimmed.length === 0) {
+      return defaultValue;
+    }
+    const parsed = Number.parseInt(trimmed, 10);
+    if (!Number.isNaN(parsed) && parsed >= 0) {
+      return parsed;
+    }
+  }
+
+  return defaultValue;
+}
+
+function hasFestivalKeyword(text: string): boolean {
+  return FESTIVAL_KEYWORD_PATTERNS.some((pattern) => pattern.test(text));
+}
+
+function isFestivalDestination(destination: Record<string, any>): boolean {
+  if (!destination || typeof destination !== "object") {
+    return false;
+  }
+
+  if (FESTIVAL_FLAG_FIELDS.some((field) => Boolean(destination[field]))) {
+    return true;
+  }
+
+  for (const field of FESTIVAL_CATEGORY_FIELDS) {
+    const value = destination[field];
+    if (typeof value === "string") {
+      const normalized = value.toLowerCase();
+      if (normalized.includes("festival") || normalized.includes("festivals") || normalized.includes("event")) {
+        return true;
+      }
+      if (hasFestivalKeyword(value)) {
+        return true;
+      }
+    }
+  }
+
+  const textSegments: string[] = [];
+  if (typeof destination.name === "string") textSegments.push(destination.name);
+  if (typeof destination.tagline === "string") textSegments.push(destination.tagline);
+  if (typeof destination.description === "string") textSegments.push(destination.description);
+  if (typeof destination.description_long === "string") textSegments.push(destination.description_long);
+  if (Array.isArray(destination.tags)) {
+    textSegments.push(destination.tags.filter((tag: unknown) => typeof tag === "string").join(" "));
+  }
+  if (Array.isArray(destination.vibe_descriptors)) {
+    textSegments.push(destination.vibe_descriptors.filter((tag: unknown) => typeof tag === "string").join(" "));
+  }
+
+  if (textSegments.length === 0) {
+    return false;
+  }
+
+  return hasFestivalKeyword(textSegments.join(" "));
+}
+
 export function registerSupabaseRoutes(app: Express): void {
-  
+
   // ============================================
   // CORE DESTINATION ENDPOINTS
   // ============================================
 
+  app.get("/api/supabase/destinations", async (req, res) => {
+    try {
+      const limit = Math.min(parseNumberParam(req.query.limit, DEFAULT_LIST_LIMIT), MAX_LIST_LIMIT);
+      const offset = parseNumberParam(req.query.offset, 0);
+
+      const queryOptions: Record<string, any> = {
+        orderBy: "name",
+        orderDirection: "asc"
+      };
+
+      if (limit > 0) {
+        queryOptions.limit = limit;
+      }
+      if (offset > 0) {
+        queryOptions.offset = offset;
+      }
+
+      const result = await supabaseStorage.getDestinations(queryOptions);
+      res.json(result.data || []);
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        error: error?.message || "Failed to fetch destinations",
+        timestamp: new Date().toISOString()
+      });
+    }
+  });
+
+  app.get("/api/supabase/destinations/regular", async (req, res) => {
+    try {
+      const limit = Math.min(parseNumberParam(req.query.limit, DEFAULT_LIST_LIMIT), MAX_LIST_LIMIT);
+      const offset = parseNumberParam(req.query.offset, 0);
+      const fetchLimit = Math.min(Math.max(limit + offset, DEFAULT_LIST_LIMIT * 2), MAX_LIST_LIMIT);
+
+      const result = await supabaseStorage.getDestinations({
+        limit: fetchLimit,
+        orderBy: "name",
+        orderDirection: "asc"
+      });
+
+      const destinations = (result.data || []).filter((destination: Record<string, any>) => !isFestivalDestination(destination));
+      const start = Math.min(offset, destinations.length);
+      const end = limit > 0 ? Math.min(start + limit, destinations.length) : destinations.length;
+
+      res.json(destinations.slice(start, end));
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        error: error?.message || "Failed to fetch regular destinations",
+        timestamp: new Date().toISOString()
+      });
+    }
+  });
+
+  app.get("/api/supabase/destinations/festivals", async (req, res) => {
+    try {
+      const limit = Math.min(parseNumberParam(req.query.limit, DEFAULT_LIST_LIMIT), MAX_LIST_LIMIT);
+      const offset = parseNumberParam(req.query.offset, 0);
+      const fetchLimit = Math.min(Math.max(limit + offset, DEFAULT_LIST_LIMIT * 2), MAX_LIST_LIMIT);
+
+      const result = await supabaseStorage.getDestinations({
+        limit: fetchLimit,
+        orderBy: "name",
+        orderDirection: "asc"
+      });
+
+      const festivals = (result.data || []).filter((destination: Record<string, any>) => isFestivalDestination(destination));
+      const start = Math.min(offset, festivals.length);
+      const end = limit > 0 ? Math.min(start + limit, festivals.length) : festivals.length;
+
+      res.json(festivals.slice(start, end));
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        error: error?.message || "Failed to fetch festivals",
+        timestamp: new Date().toISOString()
+      });
+    }
+  });
+
   /**
    * Get destinations with advanced filtering, pagination, and caching
-   * Query params: limit, offset, orderBy, orderDirection, category, search, 
+   * Query params: limit, offset, orderBy, orderDirection, category, search,
    *               minDriveTime, maxDriveTime, featured, familyFriendly, etc.
    */
   app.get("/api/supabase/destinations/advanced", async (req, res) => {
