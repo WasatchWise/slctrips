@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 import { trip_kits } from '../../shared/mt-olympus-schema.js';
-import { eq, ilike, or, desc, asc } from 'drizzle-orm';
+import { eq, ilike, or, desc, asc, and } from 'drizzle-orm';
 
 const router = Router();
 
@@ -30,21 +30,33 @@ router.get('/', async (req, res) => {
 
     let query = db.select().from(trip_kits);
 
-    // Apply filters
-    if (status) {
-      query = query.where(eq(trip_kits.status, status as string));
+    const normalizedStatus = Array.isArray(status) ? status[0] : status;
+    const normalizedTier = Array.isArray(tier) ? tier[0] : tier;
+    const normalizedSearch = Array.isArray(search) ? search[0] : search;
+
+    const filters: Parameters<typeof and> = [];
+
+    if (normalizedStatus) {
+      filters.push(eq(trip_kits.status, normalizedStatus));
     }
-    if (tier) {
-      query = query.where(eq(trip_kits.tier, tier as string));
+    if (normalizedTier) {
+      filters.push(eq(trip_kits.tier, normalizedTier));
     }
-    if (search) {
-      query = query.where(
+    if (normalizedSearch) {
+      const searchTerm = `%${normalizedSearch}%`;
+      filters.push(
         or(
-          ilike(trip_kits.name, `%${search}%`),
-          ilike(trip_kits.description, `%${search}%`),
-          ilike(trip_kits.tagline, `%${search}%`)
+          ilike(trip_kits.name, searchTerm),
+          ilike(trip_kits.description, searchTerm),
+          ilike(trip_kits.tagline, searchTerm)
         )
       );
+    }
+
+    if (filters.length === 1) {
+      query = query.where(filters[0]);
+    } else if (filters.length > 1) {
+      query = query.where(and(...filters));
     }
 
     // Apply sorting
