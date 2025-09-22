@@ -75,37 +75,6 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Get TripKit by ID
-router.get('/:id', async (req, res) => {
-  try {
-    const { id } = req.params;
-    
-    const tripKit = await db
-      .select()
-      .from(trip_kits)
-      .where(eq(trip_kits.id, id))
-      .limit(1);
-
-    if (tripKit.length === 0) {
-      return res.status(404).json({
-        success: false,
-        error: 'TripKit not found'
-      });
-    }
-
-    res.json({
-      success: true,
-      data: tripKit[0]
-    });
-  } catch (error) {
-    console.error('Error fetching TripKit:', error);
-    res.status(500).json({
-      success: false,
-      error: 'Failed to fetch TripKit'
-    });
-  }
-});
-
 // Get featured TripKits
 router.get('/featured/list', async (req, res) => {
   try {
@@ -290,4 +259,35 @@ router.get('/stats/overview', async (req, res) => {
   }
 });
 
-export default router; 
+// Get TripKit by ID
+router.get('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const tripKit = await db
+      .select()
+      .from(trip_kits)
+      .where(eq(trip_kits.id, id))
+      .limit(1);
+
+    if (tripKit.length === 0) {
+      return res.status(404).json({
+        success: false,
+        error: 'TripKit not found'
+      });
+    }
+
+    res.json({
+      success: true,
+      data: tripKit[0]
+    });
+  } catch (error) {
+    console.error('Error fetching TripKit:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to fetch TripKit'
+    });
+  }
+});
+
+export default router;

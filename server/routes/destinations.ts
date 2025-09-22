@@ -83,37 +83,6 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Get destination by ID
-router.get('/:id', async (req, res) => {
-  try {
-    const { id } = req.params;
-    
-    const destination = await db
-      .select()
-      .from(destinations)
-      .where(eq(destinations.id, Number(id)))
-      .limit(1);
-
-    if (destination.length === 0) {
-      return res.status(404).json({
-        success: false,
-        error: 'Destination not found'
-      });
-    }
-
-    res.json({
-      success: true,
-      data: destination[0]
-    });
-  } catch (error) {
-    console.error('Error fetching destination:', error);
-    res.status(500).json({
-      success: false,
-      error: 'Failed to fetch destination'
-    });
-  }
-});
-
 // Get destinations by category
 router.get('/category/:category', async (req, res) => {
   try {
@@ -242,4 +211,35 @@ router.get('/search/:query', async (req, res) => {
   }
 });
 
-export default router; 
+// Get destination by ID
+router.get('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const destination = await db
+      .select()
+      .from(destinations)
+      .where(eq(destinations.id, Number(id)))
+      .limit(1);
+
+    if (destination.length === 0) {
+      return res.status(404).json({
+        success: false,
+        error: 'Destination not found'
+      });
+    }
+
+    res.json({
+      success: true,
+      data: destination[0]
+    });
+  } catch (error) {
+    console.error('Error fetching destination:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to fetch destination'
+    });
+  }
+});
+
+export default router;
