@@ -6,6 +6,10 @@
 
 import { createClient } from '@supabase/supabase-js';
 
+const supabaseUrl = process.env.SUPABASE_URL;
+const preferredAnonKey = process.env.DANIEL_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY;
+const danielAnonKey = process.env.DANIEL_SUPABASE_ANON_KEY || preferredAnonKey;
+
 interface ColumnInfo {
   column_name: string;
   data_type: string;
@@ -26,14 +30,14 @@ export class SchemaInspector {
   constructor() {
     // Main Supabase instance
     this.supabase = createClient(
-      process.env.SUPABASE_URL!,
-      process.env.SUPABASE_ANON_KEY!
+      supabaseUrl!,
+      preferredAnonKey!
     );
 
     // Daniel's database instance
     this.danielSupabase = createClient(
-      process.env.SUPABASE_URL!,
-      process.env.DANIEL_SUPABASE_ANON_KEY!
+      supabaseUrl!,
+      danielAnonKey!
     );
   }
 

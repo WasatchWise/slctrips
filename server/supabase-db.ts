@@ -1,17 +1,20 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from '../shared/supabase-types';
 
-if (!process.env.SUPABASE_URL) {
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseAnonKey = process.env.DANIEL_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY;
+
+if (!supabaseUrl) {
   throw new Error("SUPABASE_URL must be set");
 }
 
-if (!process.env.SUPABASE_ANON_KEY) {
-  throw new Error("SUPABASE_ANON_KEY must be set");
+if (!supabaseAnonKey) {
+  throw new Error("DANIEL_SUPABASE_ANON_KEY or SUPABASE_ANON_KEY must be set");
 }
 
 export const supabase = createClient<Database>(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_ANON_KEY,
+  supabaseUrl,
+  supabaseAnonKey,
   {
     auth: {
       persistSession: false,

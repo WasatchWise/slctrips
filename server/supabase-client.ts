@@ -7,7 +7,8 @@ import { createClient } from '@supabase/supabase-js';
 
 // Use environment variables only
 const SUPABASE_URL = process.env.SUPABASE_URL;
-const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
+const SUPABASE_ANON_KEY = process.env.DANIEL_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY;
+const SUPABASE_SERVICE_ROLE_KEY = process.env.DANIEL_SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 // Provide better error messages for missing environment variables
 if (!SUPABASE_URL) {
@@ -23,15 +24,15 @@ if (!SUPABASE_ANON_KEY) {
 }
 
 // Create Supabase client only if both variables are available
-export const supabase = SUPABASE_URL && SUPABASE_ANON_KEY 
+export const supabase = SUPABASE_URL && SUPABASE_ANON_KEY
   ? createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
   : null;
 
 // Service role client for admin operations - use service role key for writes
-export const supabaseAdmin = (SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY)
+export const supabaseAdmin = (SUPABASE_URL && SUPABASE_SERVICE_ROLE_KEY)
   ? createClient(
       SUPABASE_URL,
-      process.env.SUPABASE_SERVICE_ROLE_KEY,
+      SUPABASE_SERVICE_ROLE_KEY,
       {
         auth: {
           autoRefreshToken: false,
@@ -39,7 +40,7 @@ export const supabaseAdmin = (SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_
         }
       }
     )
-  : (SUPABASE_URL && SUPABASE_ANON_KEY) 
+  : (SUPABASE_URL && SUPABASE_ANON_KEY)
     ? createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
     : null;
 

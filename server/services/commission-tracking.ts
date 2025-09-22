@@ -1,5 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
 
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseAnonKey = process.env.DANIEL_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY;
+
 interface CommissionRecord {
   id: string;
   click_id: string;
@@ -50,8 +53,8 @@ class CommissionTrackingService {
 
   constructor() {
     this.supabase = createClient(
-      process.env.SUPABASE_URL!,
-      process.env.SUPABASE_ANON_KEY!
+      supabaseUrl!,
+      supabaseAnonKey!
     );
     
     this.commissionRates = {
