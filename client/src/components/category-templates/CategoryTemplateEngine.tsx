@@ -4,6 +4,7 @@ import { PhotoDiagnostic } from '../photo-diagnostic';
 import { PhotoTest } from '../photo-test';
 import { getMainPhoto } from '../../utils/getPhotoUrl';
 import GolfCourseTemplate from './GolfCourseTemplate';
+import { AffiliateGearModule } from '../AffiliateGearModule';
 
 // Enhanced photo component with error handling
 const SafePhoto: React.FC<{ 
@@ -164,10 +165,10 @@ const FallbackTemplate: React.FC<{ destination: any }> = ({ destination }) => {
                   {destination.photos.slice(1).map((photo: any, index: number) => {
                     const photoUrl = photo.url || photo.photo_url;
                     if (!photoUrl) return null;
-                    
+
                     return (
                       <div key={index} className="aspect-square overflow-hidden rounded-lg">
-                        <SafePhoto 
+                        <SafePhoto
                           src={`/api/photo-proxy?url=${encodeURIComponent(photoUrl)}`}
                           alt={photo.alt_text || `Photo ${index + 2}`}
                           className="w-full h-full object-cover"
@@ -176,6 +177,17 @@ const FallbackTemplate: React.FC<{ destination: any }> = ({ destination }) => {
                     );
                   })}
                 </div>
+              </div>
+            )}
+
+            {/* Affiliate Gear Module */}
+            {destination.id && (
+              <div className="mt-12 mb-6">
+                <AffiliateGearModule
+                  destinationId={destination.id}
+                  destinationName={destination.name}
+                  maxProducts={4}
+                />
               </div>
             )}
           </div>

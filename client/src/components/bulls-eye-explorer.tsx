@@ -115,7 +115,7 @@ export function BullsEyeExplorer() {
 
   const handleRingClick = (ringId: string) => {
     setActiveRing(ringId);
-    setLocation(`/destinations?time=${ringId}`);
+    setLocation(`/destinations?driveTime=${ringId}`);
   };
 
   const activeRingData = activeRing ? RINGS.find(ring => ring.id === activeRing) : null;

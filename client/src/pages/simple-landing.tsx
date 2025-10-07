@@ -32,7 +32,7 @@ export default function SimpleLanding() {
             marginBottom: '1.5rem',
             color: '#1f2937'
           }}>
-            <span style={{ color: '#0087c8' }}>+1000 Places.</span>{' '}
+            <span style={{ color: '#0087c8' }}>1 Airport * 1000+ Destinations.</span>{' '}
             <span style={{ color: '#0d2a40' }}>1 Airport.</span><br />
             <span style={{ color: '#f4b441' }}>Endless Adventures.</span>
           </h1>

@@ -30,7 +30,7 @@ export default function HomeTemp() {
             SLC <span className="text-pioneer-gold">Trips</span>
           </h1>
           <p className="text-xl md:text-2xl font-subheadline text-wasatch-white/90 mb-8">
-            From Salt Lake to Everywhere
+            From Salt Lake, to Everywhere
           </p>
           
           {/* Real-time Stats */}

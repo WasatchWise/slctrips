@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { brand } from '@/lib/brand';
 
 interface SEOHeadProps {
   title: string;
@@ -267,7 +268,7 @@ export function generateWebsiteStructuredData() {
     "@type": "WebSite",
     "@id": "https://slctrips.com",
     "name": "SLC Trips",
-    "description": "Utah adventure guide featuring 700+ destinations including 2034 Winter Olympics venues with trip planning and TripKit functionality",
+    "description": `Utah adventure guide featuring ${brand.destinations} including 2034 Winter Olympics venues with trip planning and TripKit functionality`,
     "url": "https://slctrips.com",
     "potentialAction": {
       "@type": "SearchAction",

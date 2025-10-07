@@ -173,7 +173,7 @@ export default function MtOlympians() {
               </Badge>
               <Badge variant="secondary" className="text-lg px-4 py-2">
                 <Star className="w-4 h-4 mr-2" />
-                +1000 Destinations
+                1 Airport * 1000+ Destinations
               </Badge>
             </div>
           </div>

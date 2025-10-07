@@ -33,7 +33,7 @@ export default function OlympiansAtlasLanding() {
       <SkipToContentLink />
       <SEOMeta 
         title="Olympian's Atlas - Utah's 10-Year Adventure Game"
-        description="Transform Utah into your personal adventure game. Claim counties, awaken guardians, collect sigils, and build your legend leading to the 2034 Olympics. 995+ destinations await your discovery."
+        description="Transform Utah into your personal adventure game. Claim counties, awaken guardians, collect sigils, and build your legend leading to the 2034 Olympics. 1 Airport * 1000+ Destinations await your discovery."
         imageUrl="/images/utah-landscape.jpg"
         url={window.location.origin}
         type="website"
@@ -102,7 +102,7 @@ export default function OlympiansAtlasLanding() {
             <Card className="bg-white/10 backdrop-blur-sm border-white/20">
               <CardContent className="p-6 text-center">
                 <Mountain className="w-12 h-12 mx-auto mb-4 text-amber-400" />
-                <h3 className="text-xl font-bold mb-2">+1000 Destinations</h3>
+                <h3 className="text-xl font-bold mb-2">1 Airport * 1000+ Destinations</h3>
                 <p className="text-white/80">Real-world locations to discover and claim</p>
               </CardContent>
             </Card>

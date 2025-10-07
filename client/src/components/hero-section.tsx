@@ -18,7 +18,7 @@ export function HeroSection() {
         
         <div className="text-center mb-4 relative z-20">
           <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-slate-900 mb-3">
-            <span className="text-[#0087c8]">+1000 Places.</span>{" "}
+            <span className="text-[#0087c8]">1 Airport * 1000+ Destinations.</span>{" "}
             <span className="text-[#0d2a40]">1 Airport.</span><br />
             <span className="text-[#f4b441]">Endless Adventures.</span>
           </h1>

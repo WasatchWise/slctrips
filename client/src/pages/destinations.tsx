@@ -1,13 +1,20 @@
 import { useState, useEffect } from "react";
+import { useLocation } from "wouter";
 import { fetchDestinations, Destination } from "../utils/destinationData";
 
 export default function Destinations() {
+  const [location] = useLocation();
+  const urlParams = new URLSearchParams(location.split('?')[1]);
+  const driveTimeParam = urlParams.get('driveTime');
+  const searchParam = urlParams.get('search');
+
   const [destinations, setDestinations] = useState<Destination[]>([]);
   const [filteredDestinations, setFilteredDestinations] = useState<Destination[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState(searchParam || "");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedSubcategory, setSelectedSubcategory] = useState("");
+  const [maxDriveTime, setMaxDriveTime] = useState<number | null>(driveTimeParam ? parseInt(driveTimeParam) : null);
   const [sortBy, setSortBy] = useState("name");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
@@ -34,6 +41,14 @@ export default function Destinations() {
 
   useEffect(() => {
     let filtered = destinations;
+
+    // Apply drive time filter
+    if (maxDriveTime !== null) {
+      filtered = filtered.filter(dest => {
+        const driveTime = dest.driveTime || dest.drive_time_minutes || 0;
+        return driveTime <= maxDriveTime;
+      });
+    }
 
     // Apply search filter
     if (searchTerm) {
@@ -73,7 +88,7 @@ export default function Destinations() {
     });
 
     setFilteredDestinations(filtered);
-  }, [destinations, searchTerm, selectedCategory, selectedSubcategory, sortBy, sortOrder]);
+  }, [destinations, searchTerm, selectedCategory, selectedSubcategory, maxDriveTime, sortBy, sortOrder]);
 
   if (loading) {
     return (

@@ -82,44 +82,15 @@ const DestinationSlugPage: React.FC = () => {
       setError(null);
 
       try {
-        // First try to fetch by slug (if it looks like a slug)
-        let url = '';
-        const isNumericId = /^\d+$/.test(slug);
-        
-        if (isNumericId) {
-          // Direct ID lookup
-          url = `/api/destinations/${slug}`;
-        } else {
-          // Slug lookup - search by name
-          url = `/api/destinations`;
-        }
-
+        // Use new single-destination endpoint for all lookups
+        const url = `/api/destinations/${encodeURIComponent(slug)}`;
         const response = await fetch(url);
-        
+
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}: Failed to fetch destination`);
         }
 
-        const data = await response.json();
-        
-        // Handle search results (array) vs direct lookup (object)
-        let destinationData;
-        if (Array.isArray(data)) {
-          if (data.length === 0) {
-            throw new Error('Destination not found');
-          }
-          
-          // Find exact match by slug/name
-          const slugMatch = data.find((d: any) => 
-            d.name.toLowerCase().replace(/[^a-z0-9]+/g, '-') === slug.toLowerCase() ||
-            d.external_id === slug ||
-            d.name.toLowerCase() === slug.toLowerCase().replace(/-/g, ' ')
-          );
-          
-          destinationData = slugMatch || data[0]; // Use first result as fallback
-        } else {
-          destinationData = data;
-        }
+        const destinationData = await response.json();
 
         // Validate destination data
         const { destination: validatedDestination, errors } = validateDestination(destinationData);
@@ -139,7 +110,7 @@ const DestinationSlugPage: React.FC = () => {
           });
         }
 
-      } catch (_err) {
+      } catch (err) {
         const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
         setError(errorMessage);
         // console.error('Failed to fetch destination:', err);

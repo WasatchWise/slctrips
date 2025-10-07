@@ -42,7 +42,7 @@ export default function ContentDashboard() {
             <div className="flex items-center">
               <img 
                 src={slcTripsLogo} 
-                alt="SLC Trips - From Salt Lake to Everywhere - For Free" 
+                alt="SLC Trips - From Salt Lake, to Everywhere" 
                 className="h-8 w-auto object-contain"
               />
             </div>
