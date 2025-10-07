@@ -1,0 +1,65 @@
+import { createClient } from '@supabase/supabase-js';
+
+export default async function handler(req, res) {
+  try {
+    console.log('Destinations API called');
+    console.log('Environment variables:', {
+      hasSupabaseUrl: !!process.env.SUPABASE_URL,
+      hasSupabaseKey: !!process.env.SUPABASE_ANON_KEY,
+      environment: process.env.NODE_ENV
+    });
+
+    const { limit = "50", offset = "0", category, search } = req.query;
+
+    console.log('Creating Supabase client...');
+    const supabase = createClient(
+      process.env.SUPABASE_URL,
+      process.env.SUPABASE_ANON_KEY
+    );
+    console.log('Supabase client created successfully');
+
+    console.log('Building query...');
+    let query = supabase
+      .from('destinations')
+      .select('*')
+      .order('name', { ascending: true })
+      .range(parseInt(offset), parseInt(offset) + parseInt(limit) - 1);
+
+    if (category) {
+      query = query.eq('category', category);
+    }
+
+    if (search) {
+      query = query.ilike('name', `%${search}%`);
+    }
+
+    console.log('Executing query...');
+    const { data, error } = await query;
+    console.log('Query executed');
+
+    if (error) {
+      console.error('Destinations API error:', error);
+      return res.status(500).json({
+        error: 'Database error',
+        details: error.message,
+        message: 'Check environment variables in Vercel dashboard'
+      });
+    }
+
+    console.log(`Found ${data?.length || 0} destinations`);
+    res.json({
+      destinations: data || [],
+      pagination: {
+        limit: parseInt(limit),
+        offset: parseInt(offset),
+        total: data?.length || 0
+      }
+    });
+  } catch (error) {
+    console.error('Destinations API error:', error);
+    res.status(500).json({
+      error: 'Internal server error',
+      message: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
+}
