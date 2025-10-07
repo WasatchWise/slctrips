@@ -5,7 +5,8 @@ import Destinations from "./pages/destinations";
 import DestinationDetail from "./pages/destination/slug";
 import TripKits from "./pages/tripkits";
 import TripKitDetail from "./pages/tripkits/[kitId]";
-import MtOlympians from "./pages/mt-olympians";
+// Mt. Olympians archived - will return as TripKit in Phase 3
+// import MtOlympians from "./pages/archive/mt-olympians";
 import Categories from "./pages/categories";
 import CategoryDetail from "./pages/categories/[driveTime]";
 import SubcategoryDetail from "./pages/categories/[driveTime]/[subcategory]";
@@ -31,8 +32,8 @@ export default function App() {
           <Route path="/tripkits" component={TripKits} />
           <Route path="/tripkits/:kitId" component={TripKitDetail} />
           
-          {/* Mt. Olympians */}
-          <Route path="/mt-olympians" component={MtOlympians} />
+          {/* Mt. Olympians - Archived, will return as TripKit in Phase 3 */}
+          {/* <Route path="/mt-olympians" component={MtOlympians} /> */}
           
           {/* Categories & Subcategories */}
           <Route path="/categories" component={Categories} />
