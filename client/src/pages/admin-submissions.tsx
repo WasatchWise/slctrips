@@ -41,7 +41,7 @@ export default function AdminSubmissions() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  const { data: submissions = [], isLoading } = useQuery({
+  const { data: submissions = [], isLoading } = useQuery<BusinessSubmission[]>({
     queryKey: ["/api/admin/submissions"],
   });
 
@@ -101,8 +101,8 @@ export default function AdminSubmissions() {
     }
   };
 
-  const pendingSubmissions = submissions.filter((s: BusinessSubmission) => s.status === "pending");
-  const reviewedSubmissions = submissions.filter((s: BusinessSubmission) => s.status !== "pending");
+  const pendingSubmissions = submissions.filter((s: BusinessSubmission): s is BusinessSubmission => s.status === "pending");
+  const reviewedSubmissions = submissions.filter((s: BusinessSubmission): s is BusinessSubmission => s.status !== "pending");
 
   if (isLoading) {
     return (

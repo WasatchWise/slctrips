@@ -23,7 +23,7 @@ const requiredEnvVars: EnvVar[] = [
     description: 'Supabase project URL'
   },
   {
-    name: 'DANIEL_SUPABASE_ANON_KEY',
+    name: 'SUPABASE_ANON_KEY',
     required: true,
     description: 'Supabase anonymous key'
   },

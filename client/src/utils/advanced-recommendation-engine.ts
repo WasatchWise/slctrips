@@ -51,29 +51,36 @@ export async function getSmartRecommendations(
   }
 ): Promise<RecommendationResult[]> {
   // Get all potential destinations
+  const currentLat = context.currentDestination.latitude ?? context.currentDestination.coordinates?.lat;
+  const currentLng = context.currentDestination.longitude ?? context.currentDestination.coordinates?.lng;
+
+  if (!currentLat || !currentLng) {
+    return []; // Can't recommend without coordinates
+  }
+
   const allDestinations = await fetchDestinations(
-    context.currentDestination.latitude,
-    context.currentDestination.longitude,
+    currentLat,
+    currentLng,
     options.maxDistance || 50
   );
   
   // Filter destinations
-  const filteredDestinations = allDestinations.filter(dest => 
+  const filteredDestinations = allDestinations.filter(dest =>
     // Exclude current destination
     dest.id !== context.currentDestination.id &&
     // Exclude previously visited if provided
-    !(context.previousVisits?.includes(dest.id)) &&
+    !(context.previousVisits?.includes(String(dest.id))) &&
     // Exclude destinations already in itinerary if provided
-    !(context.currentItinerary?.includes(dest.id)) &&
+    !(context.currentItinerary?.includes(String(dest.id))) &&
     // Category filtering
-    (options.mustIncludeCategories 
-      ? options.mustIncludeCategories.some(cat => 
-          dest.primaryCategory === cat || dest.subcategories?.includes(cat)
+    (options.mustIncludeCategories
+      ? options.mustIncludeCategories.some(cat =>
+          (dest.primaryCategory ?? dest.category) === cat || dest.subcategories?.includes(cat) || false
         )
       : true) &&
     (options.excludeCategories
-      ? !options.excludeCategories.some(cat => 
-          dest.primaryCategory === cat || dest.subcategories?.includes(cat)
+      ? !options.excludeCategories.some(cat =>
+          (dest.primaryCategory ?? dest.category) === cat || dest.subcategories?.includes(cat) || false
         )
       : true)
   );
@@ -88,12 +95,11 @@ export async function getSmartRecommendations(
     );
     
     // Proximity score (inversely proportional to distance)
-    const distance = calculateDistance(
-      context.currentDestination.latitude,
-      context.currentDestination.longitude,
-      dest.latitude,
-      dest.longitude
-    );
+    const destLat = dest.latitude ?? dest.coordinates?.lat;
+    const destLng = dest.longitude ?? dest.coordinates?.lng;
+    const distance = (currentLat && currentLng && destLat && destLng)
+      ? calculateDistance(currentLat, currentLng, destLat, destLng)
+      : 999; // Large distance if coordinates missing
     const proximityScore = 1 - Math.min(distance / (options.maxDistance || 50), 1);
     
     // Category complementary score (0-1)
@@ -181,18 +187,18 @@ function calculateTimeComplementary(
   const isMorning = hour <= 11;
   
   // Evening to morning transition score
-  if (isEvening && candidate.best_time === 'morning') {
+  if (isEvening && candidate.best_time_of_day === 'morning') {
     return 0.9; // High score for "do this tomorrow morning" suggestions
   }
-  
+
   // Morning to evening transition score
-  if (isMorning && candidate.best_time === 'evening') {
+  if (isMorning && candidate.best_time_of_day === 'evening') {
     return 0.7; // Good score for planning ahead
   }
-  
+
   // Ideal duration sequence (short → long or long → short)
-  const currentDuration = current.average_duration_minutes || 60;
-  const candidateDuration = candidate.average_duration_minutes || 60;
+  const currentDuration = current.time_needed_minutes ?? 60;
+  const candidateDuration = candidate.time_needed_minutes ?? 60;
   
   // Prefer shorter activities after longer ones
   if (currentDuration > 120 && candidateDuration < 60) {
@@ -223,11 +229,14 @@ function calculateCategoryComplementary(
   candidate: Destination,
   userPreferences?: UserPreferences
 ): number {
+  const currentCat = current.primaryCategory ?? current.category;
+  const candidateCat = candidate.primaryCategory ?? candidate.category;
+
   // Same primary category - not diverse enough
-  if (current.primaryCategory === candidate.primaryCategory) {
+  if (currentCat === candidateCat) {
     return 0.3;
   }
-  
+
   // Perfect category pairs (data-driven combinations)
   const perfectPairs: Record<string, string[]> = {
     'outdoor-adventure': ['food-drink', 'quick-escapes'],
@@ -239,14 +248,14 @@ function calculateCategoryComplementary(
     'quick-escapes': ['food-drink', 'arts-entertainment'],
     'youth-family': ['food-drink', 'quick-escapes']
   };
-  
+
   // Check if they form a perfect pair
-  if (perfectPairs[current.primaryCategory]?.includes(candidate.primaryCategory)) {
+  if (currentCat && candidateCat && perfectPairs[currentCat]?.includes(candidateCat)) {
     return 0.9;
   }
-  
+
   // Check if they match user preferences
-  if (userPreferences?.favoriteCategories?.includes(candidate.primaryCategory)) {
+  if (candidateCat && userPreferences?.favoriteCategories?.includes(candidateCat)) {
     return 0.8;
   }
   

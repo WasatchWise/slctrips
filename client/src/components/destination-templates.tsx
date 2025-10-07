@@ -7,28 +7,7 @@ import { getPhotoUrl, getMainPhoto } from '../utils/getPhotoUrl';
 import ArtsEntertainmentTemplate from './category-templates/ArtsEntertainmentTemplate';
 import MovieMediaTemplate from './category-templates/MovieMediaTemplate';
 import CategoryTemplateEngine from './CategoryTemplateEngine';
-
-
-interface Destination {
-  id: string;
-  name: string;
-  slug: string;
-  tagline?: string;
-  description?: string;
-  description_short?: string;
-  description_long?: string;
-  latitude: number;
-  longitude: number;
-  address?: string;
-  county: string;
-  region: string;
-  driveTime: number;
-  category: string;
-  subcategory?: string;
-  photos?: Array<{ url: string; caption?: string }>;
-  photo_url?: string;
-  coordinates?: { lat: number; lng: number };
-}
+import { Destination } from '../types/destination-types';
 
 interface DestinationTemplateProps {
   destination: Destination;

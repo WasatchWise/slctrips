@@ -79,7 +79,7 @@ Make sure these environment variables are set:
 ```bash
 # Supabase Configuration
 SUPABASE_URL=your_supabase_url
-DANIEL_SUPABASE_ANON_KEY=your_supabase_anon_key
+SUPABASE_ANON_KEY=your_supabase_anon_key
 
 # Database Configuration
 DATABASE_URL=your_database_url

@@ -9,7 +9,7 @@ import { destinations } from '@shared/schema';
 import { eq } from 'drizzle-orm';
 
 const supabaseUrl = process.env.SUPABASE_URL || '';
-const supabaseKey = process.env.DANIEL_SUPABASE_ANON_KEY || '';
+const supabaseKey = process.env.SUPABASE_ANON_KEY || '';
 
 export interface SupabaseDestination {
   id: string;

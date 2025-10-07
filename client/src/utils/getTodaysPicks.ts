@@ -75,15 +75,18 @@ export function getTodaysPicks(destinations: Destination[]): Destination[] {
     const coords = DESTINATION_COORDINATES[dest.name];
     return {
       ...dest,
-      latitude: coords?.lat || null,
-      longitude: coords?.lng || null
+      latitude: coords?.lat ?? dest.latitude ?? null,
+      longitude: coords?.lng ?? dest.longitude ?? null
     };
   });
 }
 
 // Function to calculate pin position on the bulls-eye based on real coordinates
 export function calculatePinPosition(destination: Destination, containerSize: number = 1000): { x: number, y: number } {
-  if (!destination.latitude || !destination.longitude) {
+  const lat = destination.latitude ?? destination.coordinates?.lat;
+  const lng = destination.longitude ?? destination.coordinates?.lng;
+
+  if (!lat || !lng) {
     // Fallback to random position if no coordinates
     const angle = Math.random() * 2 * Math.PI;
     const radius = 100 + Math.random() * 200;
@@ -92,12 +95,12 @@ export function calculatePinPosition(destination: Destination, containerSize: nu
       y: Math.sin(angle) * radius
     };
   }
-  
+
   // Calculate distance and bearing from SLC Airport
   const lat1 = SLC_AIRPORT.lat * Math.PI / 180;
   const lng1 = SLC_AIRPORT.lng * Math.PI / 180;
-  const lat2 = destination.latitude * Math.PI / 180;
-  const lng2 = destination.longitude * Math.PI / 180;
+  const lat2 = lat * Math.PI / 180;
+  const lng2 = lng * Math.PI / 180;
   
   // Calculate distance in km
   const R = 6371; // Earth's radius in km
@@ -108,16 +111,16 @@ export function calculatePinPosition(destination: Destination, containerSize: nu
   const distance = R * c;
   
   // Calculate bearing
-  const y = Math.sin(lng2 - lng1) * Math.cos(lat2);
-  const x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(lng2 - lng1);
-  const bearing = Math.atan2(y, x) * 180 / Math.PI;
-  
+  const yBearing = Math.sin(lng2 - lng1) * Math.cos(lat2);
+  const xBearing = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(lng2 - lng1);
+  const bearing = Math.atan2(yBearing, xBearing) * 180 / Math.PI;
+
   // Convert to bulls-eye coordinates
   // Scale distance to fit within the bulls-eye (max ~500px radius)
   const maxDistance = 500; // km
   const scaleFactor = Math.min(distance / maxDistance, 1);
   const radius = scaleFactor * 250; // Max radius of 250px
-  
+
   // Convert bearing to radians and calculate position
   const bearingRad = (bearing - 90) * Math.PI / 180; // Adjust for compass orientation
   const x = Math.cos(bearingRad) * radius;
@@ -128,7 +131,7 @@ export function calculatePinPosition(destination: Destination, containerSize: nu
 
 // Function to get the ring that a destination belongs to based on drive time
 export function getDestinationRing(destination: Destination): string {
-  const driveTime = destination.driveTime || 0;
+  const driveTime = destination.driveTime ?? destination.drive_time ?? 0;
   
   if (driveTime <= 30) return '30min';
   if (driveTime <= 90) return '90min';

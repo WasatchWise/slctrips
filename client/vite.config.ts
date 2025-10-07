@@ -13,6 +13,9 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     emptyOutDir: true,
+    sourcemap: false,
+    minify: 'esbuild',
+    chunkSizeWarningLimit: 1000,
     rollupOptions: {
       onwarn(warning, warn) {
         // Suppress TypeScript warnings during build
@@ -20,6 +23,12 @@ export default defineConfig({
           return;
         }
         warn(warning);
+      },
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom', 'wouter'],
+          ui: ['@tanstack/react-query', 'lucide-react']
+        }
       }
     }
   },
@@ -28,4 +37,4 @@ export default defineConfig({
     port: 5173,
     host: '0.0.0.0'
   }
-}) 
+})

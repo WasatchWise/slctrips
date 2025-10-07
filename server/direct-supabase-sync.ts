@@ -23,7 +23,7 @@ export class DirectSupabaseSync {
     const { createClient } = await import('@supabase/supabase-js');
     this.supabase = createClient(
       process.env.SUPABASE_URL!,
-      process.env.DANIEL_SUPABASE_ANON_KEY!
+      process.env.SUPABASE_ANON_KEY!
     );
 
     // Initialize local database connection

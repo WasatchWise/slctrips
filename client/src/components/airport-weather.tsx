@@ -1,14 +1,6 @@
 import { useState, useEffect } from "react";
 import { Cloud, Sun, CloudRain, CloudSnow } from "lucide-react";
-
-interface WeatherData {
-  temp: number;
-  condition: string;
-  description: string;
-  visibility: number;
-  windSpeed: number;
-  icon: string;
-}
+import { WeatherData } from "../hooks/useWeather";
 
 interface AirportWeatherProps {
   mobileView?: boolean;
@@ -124,7 +116,7 @@ export function AirportWeather({ mobileView = false }: AirportWeatherProps) {
           {weather.temperature ? Math.round(weather.temperature) : weather.temp ? Math.round(weather.temp) : '--'}°F
         </div>
         <div className="text-[10px] text-white/80 capitalize">
-          {weather.description}
+          {weather.description || weather.condition}
         </div>
       </div>
     </a>

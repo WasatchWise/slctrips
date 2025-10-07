@@ -1,18 +1,10 @@
 import React from 'react';
+import { DestinationTemplateProps } from '@/types/destination-types';
 import { getTemplateColors } from '../../utils/destination-template-detector';
 import { Mountain, MapPin, Clock, AlertTriangle, Thermometer, Sun, Cloud, Heart, Users, Car, Tent, Compass, Share2, Bookmark, Star, Navigation, Camera, Calendar } from 'lucide-react';
 import AmazonProductCTA from '../AmazonProductCTA';
 import { SEOHead } from '../seo-head';
 import { StructuredData } from '../structured-data';
-
-interface DestinationTemplateProps {
-  destination: any;
-  subcategory?: string;
-  strategicRole?: string;
-  primaryColor?: string;
-  secondaryColor?: string;
-  accentColor?: string;
-}
 
 // Subcategory-specific components
 const HotSprings: React.FC<{ destination: any }> = ({ destination }) => (
@@ -488,15 +480,8 @@ const OutdoorAdventureTemplate: React.FC<DestinationTemplateProps> = ({
     title: `${destination.name} - Outdoor Adventure Guide | SLCTrips`,
     description: `Discover ${destination.name}, a premier outdoor adventure destination near Salt Lake City. Get trail info, gear recommendations, and insider tips for your Utah adventure.`,
     keywords: ['outdoor adventure', 'hiking', 'Utah', 'Salt Lake City', destination.name, 'trail guide'],
-    image: destination.photos?.[0]?.url || destination.image_url,
-    url: `https://www.slctrips.com/destinations/${destination.id}`,
-    type: 'destination',
-    location: {
-      name: destination.name,
-      address: destination.address,
-      lat: destination.latitude,
-      lng: destination.longitude
-    }
+    ogImage: (Array.isArray(destination.photos) ? destination.photos[0] : null) || destination.image_url || '/og-default.jpg',
+    canonical: `https://www.slctrips.com/destinations/${destination.id}`
   };
 
   const handleShare = () => {
@@ -527,19 +512,19 @@ const OutdoorAdventureTemplate: React.FC<DestinationTemplateProps> = ({
   return (
     <>
       <SEOHead {...seoData} />
-      <StructuredData 
+      <StructuredData
         destination={{
           id: destination.id,
           name: destination.name,
           description: destination.description,
           category: destination.category || 'outdoor-adventure',
-          photos: destination.photos?.map((p: any) => p.url) || [],
+          photos: Array.isArray(destination.photos) ? destination.photos : [],
           address: destination.address,
           coordinates: destination.coordinates,
           phone: destination.phone,
-          pricing: destination.pricing,
+          pricing: destination.price_range || null,
           subscriptionTier: destination.subscriptionTier,
-          hours: destination.hours,
+          hours: typeof destination.hours === 'string' ? destination.hours : null,
           rating: destination.rating,
           isOlympicVenue: destination.isOlympicVenue
         }}
@@ -548,13 +533,13 @@ const OutdoorAdventureTemplate: React.FC<DestinationTemplateProps> = ({
       {/* Hero section with outdoor imagery */}
       <section className="outdoor-hero">
         <div className="hero-image">
-          <img 
-            src={destination.photos && destination.photos.length > 0 
-              ? `/api/photo-proxy?url=${encodeURIComponent(destination.photos[0].url)}` 
-              : destination.image_url 
-                ? `/api/photo-proxy?url=${encodeURIComponent(destination.image_url)}` 
-                : '/assets/default-outdoor.jpg'} 
-            alt={destination.photos && destination.photos.length > 0 ? destination.photos[0].alt_text : destination.name}
+          <img
+            src={destination.photos && destination.photos.length > 0
+              ? `/api/photo-proxy?url=${encodeURIComponent(destination.photos[0])}`
+              : destination.image_url
+                ? `/api/photo-proxy?url=${encodeURIComponent(destination.image_url)}`
+                : '/assets/default-outdoor.jpg'}
+            alt={destination.name}
             className="hero-bg"
           />
           <div className="hero-overlay">

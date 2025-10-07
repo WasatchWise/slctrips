@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 3000;
 // Initialize Supabase client
 const supabase = createClient(
   process.env.SUPABASE_URL!,
-  process.env.DANIEL_SUPABASE_ANON_KEY!
+  process.env.SUPABASE_ANON_KEY!
 );
 
 // Initialize database connection
@@ -38,7 +38,7 @@ app.get('/api/env-test', (req: Request, res: Response) => {
   const envVars = {
     DATABASE_URL: process.env.DATABASE_URL ? 'Set' : 'Not set',
     SUPABASE_URL: process.env.SUPABASE_URL ? 'Set' : 'Not set',
-    DANIEL_SUPABASE_ANON_KEY: process.env.DANIEL_SUPABASE_ANON_KEY ? 'Set' : 'Not set',
+    SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY ? 'Set' : 'Not set',
     GOOGLE_PLACES_API_KEY: process.env.GOOGLE_PLACES_API_KEY ? 'Set' : 'Not set',
     OPENWEATHER_API_KEY: process.env.OPENWEATHER_API_KEY ? 'Set' : 'Not set'
   };

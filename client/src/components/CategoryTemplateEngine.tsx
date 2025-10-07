@@ -1,6 +1,7 @@
 import React from 'react';
 import { DestinationTemplateType, getTemplateColors, getTemplateStrategicRole } from '../utils/destination-template-detector';
 import { detectDestinationTemplate } from '../utils/destination-template-detector';
+import { Destination } from '../types/destination-types';
 
 // Import all template components
 import OutdoorAdventureTemplate from './category-templates/OutdoorAdventureTemplate';
@@ -12,14 +13,6 @@ import HiddenGemsTemplate from './category-templates/HiddenGemsTemplate';
 import SeasonalEventsTemplate from './category-templates/SeasonalEventsTemplate';
 import QuickEscapesTemplate from './category-templates/QuickEscapesTemplate';
 import YouthFamilyTemplate from './category-templates/YouthFamilyTemplate';
-
-interface Destination {
-  name: string;
-  description?: string;
-  driveTime?: number;
-  subcategory?: string;
-  [key: string]: unknown;
-}
 
 interface CategoryTemplateEngineProps {
   destination: Destination;

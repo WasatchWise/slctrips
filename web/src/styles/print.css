@@ -1,0 +1,10 @@
+@media print {
+  body { background: white !important; color: black !important; }
+  header, nav, footer, button, form { display: none !important; }
+  a::after { content: " (" attr(href) ")"; font-size: 0.8em; }
+  section { page-break-inside: avoid; }
+  .print\:break-before-page { page-break-before: always; }
+  img, .bg-cover { max-width: 100%; height: auto; }
+}
+
+

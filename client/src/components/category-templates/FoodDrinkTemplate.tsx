@@ -1,6 +1,7 @@
 import React from 'react';
+import { DestinationTemplateProps } from '@/types/destination-types';
 import { getTemplateColors } from '../../utils/destination-template-detector';
-import { Utensils, Clock, Users, MapPin, Phone, Calendar, Coffee, Wine, Beer, Leaf, Clock3 } from 'lucide-react';
+import { Utensils, Clock, Users, MapPin, Phone, Calendar, Coffee, Wine, Beer, Leaf, Clock3, Star } from 'lucide-react';
 
 // Placeholder components - these would need to be created
 const FoodHero: React.FC<{ 
@@ -387,8 +388,8 @@ const FoodDrinkTemplate: React.FC<DestinationTemplateProps> = ({
       {/* Late-night specific */}
       {isLateNight && (
         <LateNightInfo
-          closingTime={destination.hours?.closing}
-          lateMenu={destination.late_night_menu}
+          closingTime={typeof destination.hours === 'object' && destination.hours !== null ? (destination.hours as any).closing : undefined}
+          lateMenu={destination.late_night_menu === true ? [] : undefined}
         />
       )}
       

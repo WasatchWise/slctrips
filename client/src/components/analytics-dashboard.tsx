@@ -20,12 +20,27 @@ interface DestinationAnalytics {
   last_interaction: string;
 }
 
-// MarketingOpportunity interface removed as it's not used
+interface MarketingOpportunity {
+  id: number;
+  name: string;
+  category: string;
+  drive_time_text?: string;
+  website?: string;
+  phone?: string;
+  rating?: number;
+  total_clicks?: number;
+  opportunity_type: string;
+}
+
+interface AnalyticsResponse {
+  timeframe?: string;
+  topDestinations?: DestinationAnalytics[];
+}
 
 export function AnalyticsDashboard() {
   const [timeframe, setTimeframe] = useState("30");
 
-  const { data: analyticsData, isLoading: analyticsLoading } = useQuery({
+  const { data: analyticsData, isLoading: analyticsLoading } = useQuery<AnalyticsResponse>({
     queryKey: ["/api/analytics/destinations", timeframe],
     queryFn: async () => {
       const response = await fetch(`/api/analytics/destinations?timeframe=${timeframe}`);
@@ -33,8 +48,13 @@ export function AnalyticsDashboard() {
     },
   });
 
-  const { data: opportunities, isLoading: opportunitiesLoading } = useQuery({
+  const { data: opportunities, isLoading: opportunitiesLoading } = useQuery<MarketingOpportunity[]>({
     queryKey: ["/api/marketing/opportunities"],
+    queryFn: async () => {
+      const response = await fetch('/api/marketing/opportunities');
+      if (!response.ok) return [];
+      return response.json();
+    },
   });
 
   const getOpportunityColor = (type: string) => {
@@ -133,8 +153,8 @@ export function AnalyticsDashboard() {
             <div>
               <h3 className="font-semibold mb-3 text-red-600">Zero Clicks - Outreach Needed</h3>
               <div className="space-y-3 max-h-96 overflow-y-auto">
-                {(opportunities || []).filter((opp: any) => opp.opportunity_type === 'zero_clicks')
-                  .slice(0, 20).map((opportunity: any) => (
+                {(opportunities || []).filter((opp) => opp.opportunity_type === 'zero_clicks')
+                  .slice(0, 20).map((opportunity) => (
                   <div key={opportunity.id} className="p-3 border rounded-lg bg-red-50">
                     <div className="flex justify-between items-start mb-2">
                       <div>
@@ -169,8 +189,8 @@ export function AnalyticsDashboard() {
             <div>
               <h3 className="font-semibold mb-3 text-green-600">High Traffic - Partnership Ready</h3>
               <div className="space-y-3 max-h-96 overflow-y-auto">
-                {(opportunities || []).filter((opp: any) => opp.opportunity_type === 'high_traffic')
-                  .slice(0, 20).map((opportunity: any) => (
+                {(opportunities || []).filter((opp) => opp.opportunity_type === 'high_traffic')
+                  .slice(0, 20).map((opportunity) => (
                   <div key={opportunity.id} className="p-3 border rounded-lg bg-green-50">
                     <div className="flex justify-between items-start mb-2">
                       <div>
@@ -210,7 +230,7 @@ export function AnalyticsDashboard() {
         <Card>
           <CardContent className="p-4">
             <div className="text-2xl font-bold">
-              {(opportunities || []).filter((opp: any) => opp.opportunity_type === 'zero_clicks').length || 0}
+              {(opportunities || []).filter((opp) => opp.opportunity_type === 'zero_clicks').length || 0}
             </div>
             <p className="text-xs text-gray-600">Zero-Click Destinations</p>
           </CardContent>
@@ -218,7 +238,7 @@ export function AnalyticsDashboard() {
         <Card>
           <CardContent className="p-4">
             <div className="text-2xl font-bold">
-              {(opportunities || []).filter((opp: any) => opp.opportunity_type === 'high_traffic').length || 0}
+              {(opportunities || []).filter((opp) => opp.opportunity_type === 'high_traffic').length || 0}
             </div>
             <p className="text-xs text-gray-600">High-Traffic Destinations</p>
           </CardContent>
@@ -226,7 +246,7 @@ export function AnalyticsDashboard() {
         <Card>
           <CardContent className="p-4">
             <div className="text-2xl font-bold">
-              {(opportunities || []).filter((opp: any) => opp.website).length || 0}
+              {(opportunities || []).filter((opp) => opp.website).length || 0}
             </div>
             <p className="text-xs text-gray-600">Have Websites</p>
           </CardContent>
@@ -234,7 +254,7 @@ export function AnalyticsDashboard() {
         <Card>
           <CardContent className="p-4">
             <div className="text-2xl font-bold">
-              {(opportunities || []).filter((opp: any) => opp.phone).length || 0}
+              {(opportunities || []).filter((opp) => opp.phone).length || 0}
             </div>
             <p className="text-xs text-gray-600">Have Phone Numbers</p>
           </CardContent>

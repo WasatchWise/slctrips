@@ -9,7 +9,7 @@ app.get("/api/destinations", async (req, res) => {
     console.log('Destinations API called');
     console.log('Environment variables:', {
       hasSupabaseUrl: !!process.env.SUPABASE_URL,
-      hasSupabaseKey: !!process.env.DANIEL_SUPABASE_ANON_KEY,
+      hasSupabaseKey: !!process.env.SUPABASE_ANON_KEY,
       environment: process.env.NODE_ENV
     });
     
@@ -18,7 +18,7 @@ app.get("/api/destinations", async (req, res) => {
     console.log('Creating Supabase client...');
     const supabase = createClient(
       process.env.SUPABASE_URL!,
-      process.env.DANIEL_SUPABASE_ANON_KEY!
+      process.env.SUPABASE_ANON_KEY!
     );
     console.log('Supabase client created successfully');
 

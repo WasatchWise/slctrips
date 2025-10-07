@@ -1,0 +1,28 @@
+[
+  {
+    "id": "a0000000-0000-0000-0000-000000000001",
+    "title": "LED Headlamp",
+    "vendor": "amazon",
+    "priceText": "$19.99",
+    "thumbUrl": "/images/utah-placeholder.jpg",
+    "url": "https://www.amazon.com/dp/B000TEST?tag=slctrips-20",
+    "tags": ["ghost-gear"],
+    "destinationSlug": null,
+    "tripkitSlug": "haunted-utah",
+    "utahSpecific": false
+  },
+  {
+    "id": "a0000000-0000-0000-0000-000000000002",
+    "title": "Ogden Haunted Tour",
+    "vendor": "viator",
+    "priceText": "From $29",
+    "thumbUrl": "/images/utah-placeholder.jpg",
+    "url": "https://www.viator.com/tours/ogden?pid=VIATOR_PID",
+    "tags": ["viator-halloween"],
+    "destinationSlug": "ogden-halloween-alley",
+    "tripkitSlug": null,
+    "utahSpecific": true
+  }
+]
+
+

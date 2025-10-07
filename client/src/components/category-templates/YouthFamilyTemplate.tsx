@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { DestinationTemplateProps } from '@/types/destination-types';
 import { getTemplateColors } from '../../utils/destination-template-detector';
 import { Users, Baby, Heart, MapPin, Clock, CheckCircle, AlertTriangle, Sun, Cloud, Calendar } from 'lucide-react';
 
@@ -555,8 +556,8 @@ const YouthFamilyTemplate: React.FC<DestinationTemplateProps> = ({
       <section className="nearby-family-friendly">
         <h2>More Family Adventures Nearby</h2>
         <div className="family-recommendations">
-          <FamilyRecommendations 
-            currentId={destination.id}
+          <FamilyRecommendations
+            currentId={String(destination.id)}
             ageRange={selectedAgeRange ? AGE_RANGES[selectedAgeRange as keyof typeof AGE_RANGES] : undefined}
             maxDistance={15}
             limit={3}

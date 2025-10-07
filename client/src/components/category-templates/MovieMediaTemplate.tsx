@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import { DestinationTemplateProps } from '@/types/destination-types';
 import { getTemplateColors } from '../../utils/destination-template-detector';
-import { Camera, Film, Instagram, Share2, Play, Calendar, MapPin } from 'lucide-react';
+import { Camera, Film, Instagram, Share2, Play, Calendar, MapPin, Star } from 'lucide-react';
 
 // Placeholder components - these would need to be created
 const FilmSceneComparison: React.FC<{ 
@@ -274,9 +275,9 @@ const MovieMediaTemplate: React.FC<DestinationTemplateProps> = ({
       
       {/* Before/After film location slider */}
       {isFilmLocation && (
-        <FilmSceneComparison 
-          realLocation={destination.images?.current}
-          filmShot={destination.images?.film_scene}
+        <FilmSceneComparison
+          realLocation={Array.isArray(destination.images) ? destination.images[0] : undefined}
+          filmShot={Array.isArray(destination.images) && destination.images.length > 1 ? destination.images[1] : undefined}
         />
       )}
       

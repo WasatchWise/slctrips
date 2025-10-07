@@ -122,7 +122,7 @@ export function BullsEyeExplorer() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-navy-ridge via-blue-900 to-navy-ridge relative overflow-hidden">
-      <style jsx>{`
+      <style>{`
         .bulls-eye-container {
           position: relative;
           width: 600px;

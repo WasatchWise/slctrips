@@ -1,4 +1,5 @@
 import React from 'react';
+import { DestinationTemplateProps } from '@/types/destination-types';
 import { getTemplateColors } from '../../utils/destination-template-detector';
 
 // Placeholder components - these would need to be created

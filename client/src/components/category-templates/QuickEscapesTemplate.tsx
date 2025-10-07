@@ -1,4 +1,5 @@
 import React from 'react';
+import { DestinationTemplateProps } from '@/types/destination-types';
 import { getTemplateColors } from '../../utils/destination-template-detector';
 import { Clock, Car, MapPin, AlertTriangle, CheckCircle, Sun, Cloud, Coffee, Zap, Heart } from 'lucide-react';
 
@@ -232,10 +233,10 @@ const QuickEscapesTemplate: React.FC<DestinationTemplateProps> = ({
           
           {/* Weather conditions - relevant for outdoor quick escapes */}
           {destination.is_outdoor && (
-            <WeatherConditions 
-              temperature={destination.current_weather?.temperature}
-              condition={destination.current_weather?.condition}
-              precipitation={destination.current_weather?.precipitation_chance}
+            <WeatherConditions
+              temperature={destination.current_temp}
+              condition={typeof destination.current_weather === 'string' ? destination.current_weather : undefined}
+              precipitation={typeof destination.weather_forecast === 'object' && destination.weather_forecast !== null ? (destination.weather_forecast as any).precipitation_chance : undefined}
             />
           )}
         </div>

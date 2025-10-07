@@ -1,6 +1,6 @@
 import { Badge } from './ui/badge';
 import { Card, CardContent, CardHeader } from './ui/card';
-import { Calendar, Clock, MapPin } from 'lucide-react';
+import { Calendar, Clock, MapPin, Star } from 'lucide-react';
 
 interface FestivalCardProps {
   festival: {

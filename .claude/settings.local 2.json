@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:salt-lake-traveler-makeyouseestars.replit.app)",
+      "Bash(curl:*)",
+      "Read(//Users/johnlyman/Desktop/**)",
+      "Read(//tmp/**)",
+      "Bash(cd:*)",
+      "Bash(npm install)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

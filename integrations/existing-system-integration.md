@@ -53,7 +53,7 @@ wrangler deploy
 Your current `.env` file has:
 ```
 PORT=3000
-DANIEL_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 NODE_ENV=development
 
 # Email Services

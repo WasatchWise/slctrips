@@ -1,0 +1,40 @@
+[
+  {
+    "id": "00000000-0000-0000-0000-000000010000",
+    "slug": "free-explorer",
+    "name": "Free Explorer",
+    "tagline": "A starter kit to 1000+ destinations from SLC",
+    "status": "Available",
+    "price": 0,
+    "featured": true,
+    "countDestinations": 30,
+    "durationText": "Weekend to week-long",
+    "theme": "general",
+    "coverImage": "/tripkits/free-explorer.jpg",
+    "sections": [
+      { "type": "cover", "html": "<h1>Free Explorer</h1>" },
+      { "type": "intro", "html": "<p>Plan quick day trips and longer adventures.</p>" }
+    ],
+    "affiliateCollections": ["starter-gear"]
+  },
+  {
+    "id": "00000000-0000-0000-0000-000000010001",
+    "slug": "haunted-utah",
+    "name": "Haunted Utah",
+    "tagline": "Spooky spots and ghostly getaways",
+    "status": "Available",
+    "price": 9,
+    "featured": true,
+    "countDestinations": 12,
+    "durationText": "2–3 days",
+    "theme": "halloween",
+    "coverImage": "/tripkits/haunted-utah.jpg",
+    "sections": [
+      { "type": "cover", "html": "<h1>Haunted Utah</h1>" },
+      { "type": "chapter", "html": "<h2>Ghost Town Loop</h2>" }
+    ],
+    "affiliateCollections": ["ghost-gear", "viator-halloween"]
+  }
+]
+
+

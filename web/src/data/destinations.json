@@ -1,0 +1,36 @@
+[
+  {
+    "id": "00000000-0000-0000-0000-000000000001",
+    "slug": "ghost-town-frisco",
+    "name": "Frisco Ghost Town",
+    "category": "History",
+    "subcategory": "Ghost Town",
+    "rating": 4.6,
+    "driveTimeMins": 210,
+    "lat": 38.447,
+    "lng": -112.865,
+    "photoUrl": "/images/utah-placeholder.jpg",
+    "highlights": ["Abandoned mines", "Historic cemetery", "Desert views"],
+    "description_short": "One of Utah's best-preserved ghost towns.",
+    "description_long": "Explore remnants of a 19th-century mining town with eerie structures and sweeping Basin-and-Range vistas.",
+    "seasonTags": ["haunted", "fall-colors"]
+  },
+  {
+    "id": "00000000-0000-0000-0000-000000000002",
+    "slug": "ogden-halloween-alley",
+    "name": "Ogden's Halloween Alley",
+    "category": "Events",
+    "subcategory": "Seasonal",
+    "rating": 4.4,
+    "driveTimeMins": 45,
+    "lat": 41.223,
+    "lng": -111.973,
+    "photoUrl": "/images/utah-placeholder.jpg",
+    "highlights": ["Family-friendly", "Downtown stroll"],
+    "description_short": "Spooky storefronts and festive lights in Historic 25th Street.",
+    "description_long": "A walkable, family-safe Halloween scene with costumes, treats, and local storefront displays.",
+    "seasonTags": ["halloween"]
+  }
+]
+
+

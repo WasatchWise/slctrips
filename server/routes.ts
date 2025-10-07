@@ -60,7 +60,7 @@ function createSlug(text: string): string {
 // Validate essential environment variables at startup
 const essentialEnvVars = [
   'SUPABASE_URL',
-  'DANIEL_SUPABASE_ANON_KEY',
+  'SUPABASE_ANON_KEY',
   'DATABASE_URL',
   'SESSION_SECRET',
 ];
@@ -210,7 +210,7 @@ export function registerRoutes(app: Express): Server {
       console.log('Destinations API called');
       console.log('Environment variables:', {
         hasSupabaseUrl: !!process.env.SUPABASE_URL,
-        hasSupabaseKey: !!process.env.DANIEL_SUPABASE_ANON_KEY,
+        hasSupabaseKey: !!process.env.SUPABASE_ANON_KEY,
         environment: process.env.NODE_ENV
       });
       
@@ -219,7 +219,7 @@ export function registerRoutes(app: Express): Server {
       
       const supabase = createClient(
         process.env.SUPABASE_URL!,
-        process.env.DANIEL_SUPABASE_ANON_KEY!
+        process.env.SUPABASE_ANON_KEY!
       );
 
       let query = supabase
@@ -280,7 +280,7 @@ export function registerRoutes(app: Express): Server {
       
       const supabase = createClient(
         process.env.SUPABASE_URL!,
-        process.env.DANIEL_SUPABASE_ANON_KEY!
+        process.env.SUPABASE_ANON_KEY!
       );
 
       // Update all inactive destinations to active
@@ -348,7 +348,7 @@ export function registerRoutes(app: Express): Server {
       
       const supabase = createClient(
         process.env.SUPABASE_URL!,
-        process.env.DANIEL_SUPABASE_ANON_KEY!
+        process.env.SUPABASE_ANON_KEY!
       );
 
       const { data, error } = await supabase
@@ -376,7 +376,7 @@ export function registerRoutes(app: Express): Server {
       
       const supabase = createClient(
         process.env.SUPABASE_URL!,
-        process.env.DANIEL_SUPABASE_ANON_KEY!
+        process.env.SUPABASE_ANON_KEY!
       );
 
       let query = supabase
@@ -450,7 +450,7 @@ export function registerRoutes(app: Express): Server {
       const { createClient } = await import('@supabase/supabase-js');
       const supabase = createClient(
         process.env.SUPABASE_URL!,
-        process.env.DANIEL_SUPABASE_ANON_KEY!
+        process.env.SUPABASE_ANON_KEY!
       );
 
       // Get basic stats
@@ -473,7 +473,7 @@ export function registerRoutes(app: Express): Server {
       const { createClient } = await import('@supabase/supabase-js');
       const supabase = createClient(
         process.env.SUPABASE_URL!,
-        process.env.DANIEL_SUPABASE_ANON_KEY!
+        process.env.SUPABASE_ANON_KEY!
       );
 
       const { data, error } = await supabase
@@ -489,6 +489,30 @@ export function registerRoutes(app: Express): Server {
     } catch (error) {
       console.error('Admin submissions error:', error);
       res.status(500).json({ error: 'Admin submissions failed' });
+    }
+  });
+
+  // Analytics endpoints (stubs for MVP)
+  app.get("/api/analytics/destinations", async (req, res) => {
+    try {
+      const { timeframe = "30" } = req.query;
+      // Stub: Return empty array for now
+      // TODO: Implement actual analytics tracking
+      res.json([]);
+    } catch (error) {
+      console.error('Analytics destinations error:', error);
+      res.status(500).json({ error: 'Analytics failed' });
+    }
+  });
+
+  app.get("/api/marketing/opportunities", async (req, res) => {
+    try {
+      // Stub: Return empty array for now
+      // TODO: Implement marketing opportunities logic
+      res.json([]);
+    } catch (error) {
+      console.error('Marketing opportunities error:', error);
+      res.status(500).json({ error: 'Marketing opportunities failed' });
     }
   });
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { MapPin, Clock, Phone, Globe, Users, Calendar, BookOpen, Camera, Building } from 'lucide-react';
+import { MapPin, Clock, Phone, Globe, Users, Calendar, BookOpen, Camera, Building, Star } from 'lucide-react';
 
 interface Destination {
   id: number;

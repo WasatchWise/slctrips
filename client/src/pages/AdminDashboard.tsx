@@ -67,12 +67,26 @@ interface URLStatusData {
   }>;
 }
 
+interface GoogleAPIsStatus {
+  totalDestinations?: number;
+  destinationsWithPhotos?: number;
+  destinationsNeedingPhotos?: number;
+  [key: string]: any;
+}
+
+interface PhotoLibraryStatus {
+  totalDestinations?: number;
+  destinationsWithPhotos?: number;
+  destinationsNeedingPhotos?: number;
+  [key: string]: any;
+}
+
 // URL Management Component
 function URLManagement() {
   const { toast } = useToast();
 
   // Fetch URL status data
-  const { data: urlStatus, isLoading: urlStatusLoading, refetch: refetchUrlStatus } = useQuery({
+  const { data: urlStatus, isLoading: urlStatusLoading, refetch: refetchUrlStatus } = useQuery<URLStatusData>({
     queryKey: ["/api/admin/url-status"],
     refetchInterval: 30000,
   });
@@ -181,13 +195,13 @@ function GoogleAPIsIntegration() {
   const { toast } = useToast();
 
   // Fetch Google APIs status
-  const { data: googleApisStatus, isLoading: statusLoading } = useQuery({
+  const { data: googleApisStatus, isLoading: statusLoading } = useQuery<GoogleAPIsStatus>({
     queryKey: ['/api/admin/google-apis/status'],
     refetchInterval: 30000
   });
 
   // Fetch photo library status
-  const { data: photoLibraryStatus, isLoading: photoLoading } = useQuery({
+  const { data: photoLibraryStatus, isLoading: photoLoading } = useQuery<PhotoLibraryStatus>({
     queryKey: ['/api/admin/photos/library-status'],
     refetchInterval: 30000
   });
@@ -383,13 +397,13 @@ export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
 
   // Fetch analytics data
-  const { data: analytics, isLoading: analyticsLoading } = useQuery({
+  const { data: analytics, isLoading: analyticsLoading } = useQuery<AnalyticsData>({
     queryKey: ["/api/admin/analytics"],
     refetchInterval: 30000,
   });
 
   // Fetch user interactions
-  const { data: interactions, isLoading: interactionsLoading } = useQuery({
+  const { data: interactions, isLoading: interactionsLoading } = useQuery<UserInteraction[]>({
     queryKey: ["/api/admin/interactions"],
     refetchInterval: 10000,
   });

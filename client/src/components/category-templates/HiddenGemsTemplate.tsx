@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { DestinationTemplateProps } from '@/types/destination-types';
 import { getTemplateColors } from '../../utils/destination-template-detector';
 import { Gem, Clock, MapPin, Users, Lock, Calendar, Heart, Share2 } from 'lucide-react';
 

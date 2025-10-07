@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import { DestinationTemplateProps } from '@/types/destination-types';
 import { getTemplateColors } from '../../utils/destination-template-detector';
-import { Calendar, Clock, Sun, Cloud, Snowflake, Leaf, Flower, AlertTriangle, MapPin } from 'lucide-react';
+import { Calendar, Clock, Sun, Cloud, Snowflake, Leaf, Flower, AlertTriangle, MapPin, Star } from 'lucide-react';
 
 // Placeholder components - these would need to be created
 const CountdownTimer: React.FC<{ targetDate: Date }> = ({ targetDate }) => {
@@ -421,10 +422,10 @@ const SeasonalEventsTemplate: React.FC<DestinationTemplateProps> = ({
       <section className="visit-planner">
         <h2>Plan Your Visit</h2>
         <div className="calendar-container">
-          <SeasonalCalendar 
+          <SeasonalCalendar
             startDate={startDate}
             endDate={endDate}
-            peakDates={destination.peak_dates}
+            peakDates={destination.peak_dates?.map(d => new Date(d)).filter(d => !isNaN(d.getTime()))}
             selectedDate={selectedDate}
             onDateSelect={(date) => setSelectedDate(date)}
           />
@@ -442,8 +443,8 @@ const SeasonalEventsTemplate: React.FC<DestinationTemplateProps> = ({
       <section className="similar-seasonal">
         <h2>Similar Seasonal {isWildflowers ? 'Wildflower Displays' : isFallColors ? 'Fall Colors' : 'Events'}</h2>
         <div className="seasonal-recommendations">
-          <SeasonalRecommendations 
-            currentId={destination.id}
+          <SeasonalRecommendations
+            currentId={String(destination.id)}
             subcategory={subcategory}
             season={destination.season}
           />

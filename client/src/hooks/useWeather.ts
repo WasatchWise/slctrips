@@ -8,13 +8,15 @@ interface ForecastDay {
   icon?: string;
 }
 
-interface WeatherData {
-  temperature: number;
+export interface WeatherData {
+  temperature?: number;
+  temp?: number; // Alias for temperature
   condition: string;
-  humidity: number;
-  windSpeed: number;
-  lastUpdated: string;
-  source: string;
+  description?: string; // More detailed description
+  humidity?: number;
+  windSpeed?: number;
+  lastUpdated?: string;
+  source?: string;
   forecast?: ForecastDay[];
 }
 

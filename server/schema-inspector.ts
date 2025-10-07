@@ -33,7 +33,7 @@ export class SchemaInspector {
     // Daniel's database instance
     this.danielSupabase = createClient(
       process.env.SUPABASE_URL!,
-      process.env.DANIEL_SUPABASE_ANON_KEY!
+      process.env.SUPABASE_ANON_KEY!
     );
   }
 

@@ -149,7 +149,7 @@ Key environment variables (see `.env.template`):
 # Database
 DATABASE_URL="postgresql://user:pass@host:port/db"
 SUPABASE_URL="https://your-project.supabase.co"
-DANIEL_SUPABASE_ANON_KEY="your-anon-key"
+SUPABASE_ANON_KEY="your-anon-key"
 
 # External APIs
 GOOGLE_PLACES_API_KEY="your-google-key"
