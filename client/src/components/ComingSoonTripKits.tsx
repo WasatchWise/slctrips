@@ -317,7 +317,7 @@ export default function ComingSoonTripKits() {
       {/* Bottom CTA */}
       <div className="text-center mt-12 p-8 bg-blue-600 rounded-lg text-white">
         <h3 className="text-2xl font-bold mb-2">Don't See Your Dream TripKit?</h3>
-        <p className="mb-4">We'd love to hear your ideas! Email us at hello@slctrips.com</p>
+        <p className="mb-4">We'd love to hear your ideas! Email us at dan@slctrips.com</p>
         <p className="text-sm text-blue-100">
           The kits with the most interest get built first, with early supporters getting 20% off at launch.
         </p>
