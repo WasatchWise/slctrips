@@ -49,10 +49,21 @@ export interface Destination {
 export const fetchDestinations = async (): Promise<Destination[]> => {
   try {
     console.log('🔍 Fetching destinations from Supabase...');
-    
+
     const { data, error } = await supabase
       .from('destinations')
-      .select('*')
+      .select(`
+        *,
+        destination_content (
+          tagline,
+          description_short,
+          description_long,
+          address_full,
+          destination_phone,
+          cover_photo_url,
+          cover_photo_alt_text
+        )
+      `)
       .limit(2000); // Get all destinations
 
     if (error) {
@@ -69,6 +80,9 @@ export const fetchDestinations = async (): Promise<Destination[]> => {
 
     // Transform Supabase data to our interface
     const destinations: Destination[] = data.map((dest: any, index: number) => {
+      // Get content from destination_content table (object or null)
+      const content = dest.destination_content || {};
+
       // Generate realistic rating based on destination type
       let rating = 4.0;
       if (dest.name?.toLowerCase().includes('national park')) rating = 4.8;
@@ -93,14 +107,14 @@ export const fetchDestinations = async (): Promise<Destination[]> => {
         category: dest.category || 'Downtown & Nearby',
         subcategory: dest.subcategory || 'Cultural',
         driveTime,
-        description: dest.description_short || dest.description_long || `${dest.name} offers visitors a unique Utah experience.`,
-        description_short: dest.description_short,
-        description_long: dest.description_long,
-        photoUrl: dest.cover_photo_url || getPhotoUrlForCategory(dest.category),
+        description: content.description_short || content.description_long || dest.description_short || dest.description_long || `${dest.name} offers visitors a unique Utah experience.`,
+        description_short: content.description_short || dest.description_short,
+        description_long: content.description_long || dest.description_long,
+        photoUrl: content.cover_photo_url || dest.cover_photo_url || getPhotoUrlForCategory(dest.category),
         rating,
         latitude: dest.latitude || 40.7608,
         longitude: dest.longitude || -111.8910,
-        address: dest.address_full || dest.address || `${dest.name}, Utah`,
+        address: content.address_full || dest.address_full || dest.address || `${dest.name}, Utah`,
         county: dest.county || "Salt Lake",
         region: dest.region || "Wasatch Front",
         highlights: generateHighlights(dest.category),
@@ -125,14 +139,14 @@ export const fetchDestinations = async (): Promise<Destination[]> => {
         hasPlayground: dest.category === "Downtown & Nearby",
         parkingFree: Math.random() > 0.3,
         website: dest.destination_url,
-        phone: dest.destination_phone,
+        phone: content.destination_phone || dest.destination_phone,
         hours: dest.hours || "9:00 AM - 5:00 PM",
         priceRange: dest.price_range || "$0 - $20",
-        cover_photo_url: dest.cover_photo_url,
-        cover_photo_alt_text: dest.cover_photo_alt_text,
+        cover_photo_url: content.cover_photo_url || dest.cover_photo_url,
+        cover_photo_alt_text: content.cover_photo_alt_text || dest.cover_photo_alt_text,
         destination_url: dest.destination_url,
-        destination_phone: dest.destination_phone,
-        address_full: dest.address_full
+        destination_phone: content.destination_phone || dest.destination_phone,
+        address_full: content.address_full || dest.address_full
       };
     });
 
@@ -149,10 +163,21 @@ export const fetchDestinations = async (): Promise<Destination[]> => {
 export const fetchDestinationBySlug = async (slug: string): Promise<Destination | null> => {
   try {
     console.log(`🔍 Fetching destination by slug: ${slug}`);
-    
+
     const { data, error } = await supabase
       .from('destinations')
-      .select('*')
+      .select(`
+        *,
+        destination_content (
+          tagline,
+          description_short,
+          description_long,
+          address_full,
+          destination_phone,
+          cover_photo_url,
+          cover_photo_alt_text
+        )
+      `)
       .eq('slug', slug)
       .single();
 
@@ -160,6 +185,9 @@ export const fetchDestinationBySlug = async (slug: string): Promise<Destination 
       console.warn(`⚠️ Destination not found: ${slug}`);
       return null;
     }
+
+    // Get content from destination_content table (object or null)
+    const content = data.destination_content || {};
 
     // Generate realistic rating
     let rating = 4.0;
@@ -185,14 +213,14 @@ export const fetchDestinationBySlug = async (slug: string): Promise<Destination 
       category: data.category || 'Downtown & Nearby',
       subcategory: data.subcategory || 'Cultural',
       driveTime,
-      description: data.description_short || data.description_long || `${data.name} offers visitors a unique Utah experience.`,
-      description_short: data.description_short,
-      description_long: data.description_long,
-      photoUrl: data.cover_photo_url || getPhotoUrlForCategory(data.category),
+      description: content.description_short || content.description_long || data.description_short || data.description_long || `${data.name} offers visitors a unique Utah experience.`,
+      description_short: content.description_short || data.description_short,
+      description_long: content.description_long || data.description_long,
+      photoUrl: content.cover_photo_url || data.cover_photo_url || getPhotoUrlForCategory(data.category),
       rating,
       latitude: data.latitude || 40.7608,
       longitude: data.longitude || -111.8910,
-      address: data.address_full || data.address || `${data.name}, Utah`,
+      address: content.address_full || data.address_full || data.address || `${data.name}, Utah`,
       county: data.county || "Salt Lake",
       region: data.region || "Wasatch Front",
       highlights: generateHighlights(data.category),
@@ -217,14 +245,14 @@ export const fetchDestinationBySlug = async (slug: string): Promise<Destination 
       hasPlayground: data.category === "Downtown & Nearby",
       parkingFree: Math.random() > 0.3,
       website: data.destination_url,
-      phone: data.destination_phone,
+      phone: content.destination_phone || data.destination_phone,
       hours: data.hours || "9:00 AM - 5:00 PM",
       priceRange: data.price_range || "$0 - $20",
-      cover_photo_url: data.cover_photo_url,
-      cover_photo_alt_text: data.cover_photo_alt_text,
+      cover_photo_url: content.cover_photo_url || data.cover_photo_url,
+      cover_photo_alt_text: content.cover_photo_alt_text || data.cover_photo_alt_text,
       destination_url: data.destination_url,
-      destination_phone: data.destination_phone,
-      address_full: data.address_full
+      destination_phone: content.destination_phone || data.destination_phone,
+      address_full: content.address_full || data.address_full
     };
 
   } catch (error) {

@@ -1,6 +1,16 @@
 import { supabase } from '../lib/supabase';
 
 // Strict TypeScript interfaces matching the new BRAINS schema
+export interface DestinationContent {
+  tagline?: string | null;
+  description_short?: string | null;
+  description_long?: string | null;
+  address_full?: string | null;
+  destination_phone?: string | null;
+  cover_photo_url?: string | null;
+  cover_photo_alt_text?: string | null;
+}
+
 export interface Destination {
   uuid: string;
   name: string;
@@ -15,6 +25,7 @@ export interface Destination {
   description?: string | null;
   cover_photo_url?: string | null;
   cover_photo_alt_text?: string | null;
+  destination_content?: DestinationContent | null;
 }
 
 export interface DestinationTag {
@@ -45,7 +56,16 @@ export async function fetchDestinationsByCategory(category: string) {
       cover_photo_url,
       cover_photo_alt_text,
       destination_tags:destination_tags ( tag_name ),
-      activities:activities ( activity_name )
+      activities:activities ( activity_name ),
+      destination_content (
+        tagline,
+        description_short,
+        description_long,
+        address_full,
+        destination_phone,
+        cover_photo_url,
+        cover_photo_alt_text
+      )
     `)
     .eq('category', category)
     .order('name', { ascending: true });
@@ -78,7 +98,16 @@ export async function fetchDestinationBySlug(slug: string) {
       cover_photo_url,
       cover_photo_alt_text,
       destination_tags:destination_tags ( tag_name ),
-      activities:activities ( activity_name )
+      activities:activities ( activity_name ),
+      destination_content (
+        tagline,
+        description_short,
+        description_long,
+        address_full,
+        destination_phone,
+        cover_photo_url,
+        cover_photo_alt_text
+      )
     `)
     .eq('destination_url', slug)
     .single();
@@ -133,7 +162,16 @@ export async function fetchAllDestinations() {
       cover_photo_url,
       cover_photo_alt_text,
       destination_tags:destination_tags ( tag_name ),
-      activities:activities ( activity_name )
+      activities:activities ( activity_name ),
+      destination_content (
+        tagline,
+        description_short,
+        description_long,
+        address_full,
+        destination_phone,
+        cover_photo_url,
+        cover_photo_alt_text
+      )
     `)
     .order('name', { ascending: true });
 
