@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
 import { fetchDestinationBySlug, Destination } from "../../utils/destinationData";
 import { MapPin, Clock, Star, Phone, Globe, Calendar, Users, Dog, Baby, Car, Coffee, Camera, Mountain, Heart } from "lucide-react";
+import SourceAttribution from "../../components/SourceAttribution";
 
 export default function DestinationDetail() {
   const [, setLocation] = useLocation();
@@ -318,6 +319,11 @@ export default function DestinationDetail() {
               </div>
             )}
           </div>
+        </div>
+
+        {/* Source Attribution */}
+        <div className="mt-8">
+          <SourceAttribution destinationId={destination.id} />
         </div>
 
         {/* Back Button */}

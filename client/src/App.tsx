@@ -2,9 +2,10 @@ import { Route, Switch } from "wouter";
 import Landing from "./pages/landing";
 import Search from "./components/search";
 import Destinations from "./pages/destinations";
-import DestinationDetail from "./pages/destination/slug";
+import DestinationDetail from "./pages/destination/[slug]";
+import MapPage from "./pages/map";
 import TripKits from "./pages/tripkits";
-import TripKitDetail from "./pages/tripkits/[kitId]";
+import TripKitDetail from "./pages/tripkits/[slug]";
 // Mt. Olympians archived - will return as TripKit in Phase 3
 // import MtOlympians from "./pages/archive/mt-olympians";
 import Categories from "./pages/categories";
@@ -25,12 +26,13 @@ export default function App() {
           {/* Main Pages */}
           <Route path="/" component={Landing} />
           <Route path="/search" component={Search} />
+          <Route path="/map" component={MapPage} />
           <Route path="/destinations" component={Destinations} />
           <Route path="/destination/:slug" component={DestinationDetail} />
           
           {/* TripKits */}
           <Route path="/tripkits" component={TripKits} />
-          <Route path="/tripkits/:kitId" component={TripKitDetail} />
+          <Route path="/tripkits/:slug" component={TripKitDetail} />
           
           {/* Mt. Olympians - Archived, will return as TripKit in Phase 3 */}
           {/* <Route path="/mt-olympians" component={MtOlympians} /> */}
