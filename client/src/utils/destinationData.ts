@@ -83,6 +83,26 @@ export const fetchDestinations = async (): Promise<Destination[]> => {
       // Get content from destination_content table (object or null)
       const content = dest.destination_content || {};
 
+      // Calculate actual drive time from coordinates
+      const slcLat = 40.7608;
+      const slcLon = -111.8910;
+      let driveTime = 60; // default fallback
+
+      if (dest.latitude && dest.longitude) {
+        // Calculate distance using Haversine formula
+        const R = 3959; // Earth radius in miles
+        const dLat = (dest.latitude - slcLat) * Math.PI / 180;
+        const dLon = (dest.longitude - slcLon) * Math.PI / 180;
+        const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                  Math.cos(slcLat * Math.PI / 180) * Math.cos(dest.latitude * Math.PI / 180) *
+                  Math.sin(dLon/2) * Math.sin(dLon/2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        const distanceMiles = R * c;
+
+        // Estimate drive time (average 50mph including stops, slower roads)
+        driveTime = Math.round(distanceMiles / 50 * 60); // convert to minutes
+      }
+
       // Generate realistic rating based on destination type
       let rating = 4.0;
       if (dest.name?.toLowerCase().includes('national park')) rating = 4.8;
@@ -90,15 +110,6 @@ export const fetchDestinations = async (): Promise<Destination[]> => {
       else if (dest.name?.toLowerCase().includes('ski')) rating = 4.5;
       else if (dest.name?.toLowerCase().includes('museum')) rating = 4.2;
       else rating = 4.0 + (Math.random() * 0.5); // 4.0-4.5 range
-
-      // Generate realistic drive time based on category
-      let driveTime = 60;
-      if (dest.category === 'Downtown & Nearby') driveTime = 15 + Math.floor(Math.random() * 30);
-      else if (dest.category === 'Less than 90 Minutes') driveTime = 30 + Math.floor(Math.random() * 60);
-      else if (dest.category === 'Less than 3 Hours') driveTime = 90 + Math.floor(Math.random() * 90);
-      else if (dest.category === 'Less than 5 Hours') driveTime = 180 + Math.floor(Math.random() * 120);
-      else if (dest.category === 'Less than 8 Hours') driveTime = 300 + Math.floor(Math.random() * 180);
-      else if (dest.category === 'Less than 12 Hours') driveTime = 480 + Math.floor(Math.random() * 240);
 
       return {
         id: dest.id || index + 1,
@@ -189,6 +200,26 @@ export const fetchDestinationBySlug = async (slug: string): Promise<Destination 
     // Get content from destination_content table (object or null)
     const content = data.destination_content || {};
 
+    // Calculate actual drive time from coordinates
+    const slcLat = 40.7608;
+    const slcLon = -111.8910;
+    let driveTime = 60; // default fallback
+
+    if (data.latitude && data.longitude) {
+      // Calculate distance using Haversine formula
+      const R = 3959; // Earth radius in miles
+      const dLat = (data.latitude - slcLat) * Math.PI / 180;
+      const dLon = (data.longitude - slcLon) * Math.PI / 180;
+      const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(slcLat * Math.PI / 180) * Math.cos(data.latitude * Math.PI / 180) *
+                Math.sin(dLon/2) * Math.sin(dLon/2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      const distanceMiles = R * c;
+
+      // Estimate drive time (average 50mph including stops, slower roads)
+      driveTime = Math.round(distanceMiles / 50 * 60); // convert to minutes
+    }
+
     // Generate realistic rating
     let rating = 4.0;
     if (data.name?.toLowerCase().includes('national park')) rating = 4.8;
@@ -196,15 +227,6 @@ export const fetchDestinationBySlug = async (slug: string): Promise<Destination 
     else if (data.name?.toLowerCase().includes('ski')) rating = 4.5;
     else if (data.name?.toLowerCase().includes('museum')) rating = 4.2;
     else rating = 4.0 + (Math.random() * 0.5);
-
-    // Generate realistic drive time
-    let driveTime = 60;
-    if (data.category === 'Downtown & Nearby') driveTime = 15 + Math.floor(Math.random() * 30);
-    else if (data.category === 'Less than 90 Minutes') driveTime = 30 + Math.floor(Math.random() * 60);
-    else if (data.category === 'Less than 3 Hours') driveTime = 90 + Math.floor(Math.random() * 90);
-    else if (data.category === 'Less than 5 Hours') driveTime = 180 + Math.floor(Math.random() * 120);
-    else if (data.category === 'Less than 8 Hours') driveTime = 300 + Math.floor(Math.random() * 180);
-    else if (data.category === 'Less than 12 Hours') driveTime = 480 + Math.floor(Math.random() * 240);
 
     return {
       id: data.id,
