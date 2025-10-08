@@ -3,6 +3,7 @@ import { useLocation } from "wouter";
 import { fetchDestinationBySlug, Destination } from "../../utils/destinationData";
 import { MapPin, Clock, Star, Phone, Globe, Calendar, Users, Dog, Baby, Car, Coffee, Camera, Mountain, Heart } from "lucide-react";
 import SourceAttribution from "../../components/SourceAttribution";
+import TripKitUpsell from "../../components/TripKitUpsell";
 
 export default function DestinationDetail() {
   const [, setLocation] = useLocation();
@@ -319,6 +320,15 @@ export default function DestinationDetail() {
               </div>
             )}
           </div>
+        </div>
+
+        {/* TripKit Upsell */}
+        <div className="mt-8">
+          <TripKitUpsell
+            destinationId={destination.id}
+            destinationCategory={destination.category}
+            destinationTheme={destination.subcategory}
+          />
         </div>
 
         {/* Source Attribution */}
