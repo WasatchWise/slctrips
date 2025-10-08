@@ -5,6 +5,7 @@
 
 import React from 'react';
 import CategoryTemplateEngine from './category-templates/CategoryTemplateEngine';
+import SourceAttribution from './SourceAttribution';
 import { Destination, ValidationError } from '../lib/validateDestination';
 import { AlertTriangle } from 'lucide-react';
 
@@ -52,6 +53,18 @@ const DestinationPage: React.FC<DestinationPageProps> = ({ destination, validati
 
       {/* Category-Specific Template */}
       <CategoryTemplateEngine destination={templateDestination} />
+
+      {/* Source Attribution - Display data provenance */}
+      <div className="max-w-6xl mx-auto px-4 py-6">
+        <SourceAttribution
+          sourceUrl={destination.source_url}
+          sourceName={destination.source_name}
+          sourceType={destination.source_type}
+          verifiedAt={destination.verified_at}
+          dataQualityScore={destination.data_quality_score}
+          lastVerifiedAt={destination.last_verified_at}
+        />
+      </div>
     </div>
   );
 };
