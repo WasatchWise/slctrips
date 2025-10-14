@@ -2,7 +2,8 @@ import { Router } from 'express';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 import { destinations } from '../../shared/schema.js';
-import { eq, ilike, or, desc, asc } from 'drizzle-orm';
+import { eq, ilike, or, desc, asc, and } from 'drizzle-orm';
+import type { SQLWrapper } from 'drizzle-orm';
 
 const router = Router();
 
@@ -32,27 +33,34 @@ router.get('/', async (req, res) => {
 
     let query = db.select().from(destinations);
 
-    // Apply filters
+    const filters: SQLWrapper[] = [];
+
     if (category) {
-      query = query.where(eq(destinations.category, category as string));
+      filters.push(eq(destinations.category, category as string));
     }
     if (subcategory) {
-      query = query.where(eq(destinations.subcategory, subcategory as string));
+      filters.push(eq(destinations.subcategory, subcategory as string));
     }
     if (county) {
-      query = query.where(eq(destinations.county, county as string));
+      filters.push(eq(destinations.county, county as string));
     }
     if (region) {
-      query = query.where(eq(destinations.region, region as string));
+      filters.push(eq(destinations.region, region as string));
     }
     if (search) {
-      query = query.where(
+      const searchTerm = `%${search}%`;
+      filters.push(
         or(
-          ilike(destinations.name, `%${search}%`),
-          ilike(destinations.description, `%${search}%`),
-          ilike(destinations.address, `%${search}%`)
+          ilike(destinations.name, searchTerm),
+          ilike(destinations.metaDescription, searchTerm),
+          ilike(destinations.address, searchTerm)
         )
       );
+    }
+
+    if (filters.length > 0) {
+      const combinedFilter = filters.length === 1 ? filters[0]! : and(...filters);
+      query = query.where(combinedFilter);
     }
 
     // Apply sorting
@@ -219,7 +227,7 @@ router.get('/search/:query', async (req, res) => {
       .where(
         or(
           ilike(destinations.name, `%${query}%`),
-          ilike(destinations.description, `%${query}%`),
+          ilike(destinations.metaDescription, `%${query}%`),
           ilike(destinations.address, `%${query}%`),
           ilike(destinations.category, `%${query}%`),
           ilike(destinations.subcategory, `%${query}%`)
